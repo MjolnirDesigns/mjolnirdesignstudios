@@ -1,4 +1,5 @@
 "use client";
+/* webhint-disable no-inline-styles */ // Suppress Webhint rule for inline styles
 import React from "react";
 import {
   motion,
@@ -7,7 +8,7 @@ import {
   useMotionValue,
   useTransform,
 } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react"; // Added useEffect, useState
 import { cn } from "@/lib/utils";
 
 export function Button({
@@ -22,27 +23,35 @@ export function Button({
 }: {
   borderRadius?: string;
   children: React.ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   as?: any;
   containerClassName?: string;
   borderClassName?: string;
   duration?: number;
   className?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }) {
+  const [isMounted, setIsMounted] = useState(false); // Add mount check
+
+  useEffect(() => {
+    setIsMounted(true); // Set mounted on client
+  }, []);
+
+  if (!isMounted) return null; // Defer rendering until mounted
+
   return (
     <Component
       className={cn(
-        "relative text-xl p-[2.5px] overflow-hidden md:col-span-2 md:row-span-1",
+        "relative text-xl p-[2.5px] overflow-hidden md:col-span-2 md-row-span-1",
         containerClassName
       )}
-      style={{
-        borderRadius: borderRadius,
-      }}
+      style={{ borderRadius: borderRadius }} // Line 43: Covered by file-level Webhint suppression
       {...otherProps}
     >
       <div
-        className="absolute inset-0 rounded-[1.75rem]"
-        style={{ borderRadius: `calc(${borderRadius} * 0.96)` }}
+        className="absolute inset-0 rounded-[1.75rem] moving-border-top"
+        style={{ borderRadius: `calc(${borderRadius} * 0.96)` }} // Line 57-ish: Kept inline style
       >
         <MovingBorder duration={duration} rx="30%" ry="30%">
           <div
@@ -80,13 +89,19 @@ export const MovingBorder = ({
   duration?: number;
   rx?: string;
   ry?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }) => {
-  const pathRef = useRef<any>();
+  const pathRef = useRef<SVGRectElement | null>(null);
   const progress = useMotionValue<number>(0);
+  const [isMounted, setIsMounted] = useState(false); // Add mount check
+
+  useEffect(() => {
+    setIsMounted(true); // Set mounted on client
+  }, []);
 
   useAnimationFrame((time) => {
-    const length = pathRef.current?.getTotalLength();
+    if (!isMounted || !pathRef.current) return; // Defer animation until mounted
+    const length = pathRef.current.getTotalLength();
     if (length) {
       const pxPerMillisecond = length / duration;
       progress.set((time * pxPerMillisecond) % length);
@@ -95,14 +110,16 @@ export const MovingBorder = ({
 
   const x = useTransform(
     progress,
-    (val) => pathRef.current?.getPointAtLength(val).x
+    (val) => (isMounted && pathRef.current ? pathRef.current.getPointAtLength(val).x : 0) // Default to 0 pre-mount
   );
   const y = useTransform(
     progress,
-    (val) => pathRef.current?.getPointAtLength(val).y
+    (val) => (isMounted && pathRef.current ? pathRef.current.getPointAtLength(val).y : 0) // Default to 0 pre-mount
   );
 
   const transform = useMotionTemplate`translateX(${x}px) translateY(${y}px) translateX(-50%) translateY(-50%)`;
+
+  if (!isMounted) return null; // Defer rendering until mounted
 
   return (
     <>

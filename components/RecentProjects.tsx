@@ -2,6 +2,7 @@ import { projects } from '@/data'
 import React from 'react'
 import { PinContainer } from './ui/3d-pin'
 import { FaLocationArrow } from 'react-icons/fa6'
+import Image from 'next/image'
 
 const RecentProjects = () => {
     return (
@@ -10,7 +11,7 @@ const RecentProjects = () => {
                 Recent designs built for {' '}
                 <span className="text-gold"> Asgardians!</span>
             </h1>
-            <div className="flex flex-wrap items-center justify-center p-4 gap-x-24 gap-y-8 mt-4 md:flex-row md:flex-wrap md:gap-x-24">
+            <div className="flex flex-wrap sm:grid-cols-2 items-center justify-center p-4 gap-x-8 gap-y-8 mt-4 md:flex-row md:flex-wrap md:gap-x-24 md:grid-cols-2 md:gap-y-8">
                 {projects.map(({
                     id,
                     title,
@@ -27,13 +28,21 @@ const RecentProjects = () => {
                         >
                             <div className="relative flex items-center justify-center sm:w-[570px] w-[80vw] overflow-hidden sm:h-[40vh] h-[30vh] mb-10">
                                 <div className="relative w-full h-full overflow-hidden lg:rounded-3xl bg-transparent items-center">
-                                    <img src="/bg.png" alt="bg-img" />
+                                    <Image 
+                                        src="/bg.png" 
+                                        alt="bg-img"
+                                        width={570}
+                                        height={400}
+                                        className="object-cover object-center"
+                                    />
                                 </div>
-                                <img 
+                                <Image 
                                     src={img}
                                     alt={title}
-                                    className="z-10 absolute top-2/3 -translate-y-1/2 w-full max-w-full h-auto object-contain"
+                                    width={570}
+                                    height={400}
                                     className={imgClassName || "z-10 absolute top-1/2 -translate-y-1/2 w-full max-w-full h-auto object-contain"}
+                                    priority
                                 />
                             </div>
                             <h1 className="font-bold lg:text-2xl md:text-xl text-base line-clamp-1 text-gold">
@@ -50,7 +59,13 @@ const RecentProjects = () => {
                                         style={{
                                             transform:`translateX(-${5 * index * 2}px)`
                                         }}>
-                                            <img src={icon} alt={icon} className="p-2" />
+                                            <Image 
+                                                src={icon} 
+                                                alt={icon}
+                                                width={32} // Adjust based on lg:w-10 lg:h-10 (40px) or w-8 h-8 (32px)
+                                                height={32}
+                                                className="p-2"
+                                            />
                                         </div>
                                     ))}
                                 </div>

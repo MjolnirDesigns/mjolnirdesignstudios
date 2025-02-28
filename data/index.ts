@@ -14,7 +14,7 @@ export const navItems = [
       className: "lg:col-span-3 md:col-span-6 md:row-span-4 lg:min-h-[60vh]",
       imgClassName: "w-[70%] h-auto max-w-full object-contain mx-auto",
       titleClassName: "justify-end text-[#A9A9A9]",
-      img: "/mjolnir.jpeg",
+      img: "/Mjolnir.jpeg",
       spareImg: "",
     },
     {
@@ -92,7 +92,7 @@ export const navItems = [
       id: 3,
       title: "RetroXRP",
       des: "A new and original action/adventure 2De (2D Enhanced) Indie Game and gaming platform build natively on the XRP Ledger (XRPL) block chain.",
-      img: "/8bit-RetroArcade.jpeg",
+      img: "/8Bit-RetroArcade.jpeg",
       iconLists: ["/re.svg", "/tail.svg", "/ts.svg", "/three.svg", "/c.svg"],
       link: "https://www.RetroXRP.com",
       imgClassName: "z-10 absolute top-1/2 -translate-y-1/2 w-[100%] max-w-[100%] h-auto object-contain",
