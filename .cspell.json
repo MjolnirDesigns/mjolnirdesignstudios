@@ -1,0 +1,26 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "Mjolnir", // Ignore your brand name
+    "BiFrost", // Norse term
+    "Midgard", // Norse term
+    "Asgard", // Norse term
+    "Yggdrasil", // Norse term
+    "Valkyries", // From testimonials
+    "Gungnir", // From testimonials
+    "Fenris", // From testimonials
+    "Nidavellir", // From testimonials
+    "Aesir", // From testimonials
+    "Volstagg", // From testimonials
+    "Heim", // From testimonials
+    "Dall", // From testimonials
+    "Siff", // From testimonials
+    "Odin", // Common Norse
+    "Thor", // Common Norse
+    "nextjs", // Common tech term
+    "tailwindcss", // Common tech term
+    "framer" // For Framer Motion
+  ],
+  "ignorePaths": ["node_modules/**", ".next/**", ".gitignore"]
+}

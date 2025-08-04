@@ -1,21 +1,13 @@
 import type { Config } from "tailwindcss";
-
 import svgToDataUri from "mini-svg-data-uri";
+import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
+import animate from "tailwindcss-animate";
 
-
-
-
-const {
-  default: flattenColorPalette,
-} = require("tailwindcss/lib/util/flattenColorPalette");
-
-const config = {
+const config: Config = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
     "./data/**/*.{ts,tsx}",
   ],
   prefix: "",
@@ -24,24 +16,29 @@ const config = {
       center: true,
       padding: "2rem",
       screens: {
+        "xs": "0px",
+        "sm": "640px",
+        "md": "768px",
+        "lg": "1024px",
+        "xl": "1280px",
         "2xl": "1400px",
       },
     },
     extend: {
       colors: {
         gold: {
-          DEFAULT: '#FFCC11', //Pure Gold
-          100: '#EFBF04', //Bright Gold
+          DEFAULT: '#FFCC11', // Pure Gold
+          100: '#EFBF04', // Bright Gold
         },
         iron: {
-          DEFAULT: '#48494B', //Iron
+          DEFAULT: '#48494B', // Iron
         },
         shadow: {
-          DEFAULT: '#171717', //Shadow
+          DEFAULT: '#171717', // Shadow
         },
         silver: {
-          DEFAULT: '#C0C0C0', //Pure Silver
-          100: '#A9A9A9', //Dark Silver
+          DEFAULT: '#C0C0C0', // Pure Silver
+          100: '#A9A9A9', // Dark Silver
         },
         black: {
           DEFAULT: "#000",
@@ -179,42 +176,40 @@ const config = {
     },
   },
   plugins: [
-    require("tailwindcss-animate"),
-    addVariablesForColors,
-    function ({ matchUtilities, theme }: any) {
+    animate,
+    function ({ addBase, theme }: import('tailwindcss/types/config').PluginAPI) {
+      const allColors = flattenColorPalette(theme("colors"));
+      const newVars = Object.fromEntries(
+        Object.entries(allColors).map(([key, val]) => [`--${key}`, String(val)])
+      );
+
+      addBase({
+        ":root": newVars,
+      });
+    },
+    function ({ matchUtilities, theme }: import('tailwindcss/types/config').PluginAPI) {
       matchUtilities(
         {
-          "bg-grid": (value: any) => ({
+          "bg-grid": (value: string) => ({
             backgroundImage: `url("${svgToDataUri(
               `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100" height="100" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`
             )}")`,
           }),
-          "bg-grid-small": (value: any) => ({
+          "bg-grid-small": (value: string) => ({
             backgroundImage: `url("${svgToDataUri(
               `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="8" height="8" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`
             )}")`,
           }),
-          "bg-dot": (value: any) => ({
+          "bg-dot": (value: string) => ({
             backgroundImage: `url("${svgToDataUri(
               `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none"><circle fill="${value}" id="pattern-circle" cx="10" cy="10" r="1.6257413380501518"></circle></svg>`
             )}")`,
           }),
         },
-        { values: flattenColorPalette(theme("backgroundColor")), type: "color" }
+        { values: flattenColorPalette(theme("backgroundColor")), type: ["color"] }
       );
     },
   ],
 } satisfies Config;
-
-function addVariablesForColors({ addBase, theme }: any) {
-  let allColors = flattenColorPalette(theme("colors"));
-  let newVars = Object.fromEntries(
-    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
-  );
-
-  addBase({
-    ":root": newVars,
-  });
-}
 
 export default config;

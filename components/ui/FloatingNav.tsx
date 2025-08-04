@@ -25,24 +25,23 @@ export const FloatingNav = ({
   const [visible, setVisible] = useState(false);
 
   useMotionValueEvent(scrollYProgress, "change", (current) => {
-    // Check if current is not undefined and is a number
     if (typeof current === "number") {
       const previous = scrollYProgress.getPrevious();
 
       if (typeof previous === "number") {
         const direction = current - previous;
 
-      if (scrollYProgress.get() < 0.05) {
-        setVisible(false);
-      } else {
-        if (direction < 0) {
-          setVisible(true);
-        } else {
+        if (scrollYProgress.get() < 0.05) {
           setVisible(false);
+        } else {
+          if (direction < 0) {
+            setVisible(true);
+          } else {
+            setVisible(false);
+          }
         }
       }
     }
-  }
   });
 
   return (
@@ -61,7 +60,8 @@ export const FloatingNav = ({
         }}
         className={cn(
           "flex max-w-fit fixed top-10 inset-x-0 mx-auto border dark:border-white/[0.2] rounded-lg bg-shadow z-[5000] px-10 py-5 items-center justify-center space-x-4",
-          className
+          className,
+          "lg:hidden" // Hide on large screens (lg breakpoint and up)
         )}
       >
         {navItems.map((navItem: { name: string; link: string; icon?: React.ReactElement }, idx: number) => (
@@ -76,9 +76,9 @@ export const FloatingNav = ({
             <span className="text-sm !cursor-pointer">{navItem.name}</span>
           </Link>
         ))}
-        <button className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2]   text-black dark:text-white px-4 py-2 rounded-full">
+        <button className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full">
           <span>Login</span>
-          <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-emerald-500 to-transparent  h-px" />
+          <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-emerald-500 to-transparent h-px" />
         </button>
       </motion.div>
     </AnimatePresence>

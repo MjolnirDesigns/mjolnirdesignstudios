@@ -10,8 +10,26 @@ const geo = Geo({
 });
 
 export const metadata: Metadata = {
-  title: "Mjolnir Design Studios",
-  description: "For Midgard!",
+  title: {
+    default: "Mjolnir Design Studios",
+    template: "%s | Mjolnir Design Studios",
+  },
+    description: "For Midgard!",
+    keywords: [
+      "Design",
+      "Digital Design",
+      "Hostinger",
+      "Mjolnir",
+      "Mjolnir Design Studios",
+      "Powerful Design",
+      "UI Design",
+      "UX Design",
+      "UI/UX Design",
+      "Web Design",
+      "Web Design Services",
+      "Web Development",
+      "Web Development Services",
+    ],
 };
 
 export default function RootLayout({

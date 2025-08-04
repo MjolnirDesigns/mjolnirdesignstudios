@@ -6,26 +6,27 @@ import Hero from "@/components/Hero";
 import Pricing from "@/components/Pricing";
 import Process from "@/components/Process";
 import RecentProjects from "@/components/RecentProjects";
+import SummonMjolnir from "@/components/SummonUs";
 import { FloatingNav } from "@/components/ui/FloatingNav";
+import Navbar from "@/components/ui/Navbar"; // New import
 import { navItems } from "@/data";
-
-
 
 export default function Home() {
   return (
-    <main className="relative bg-shadow flex flex-col justify-center items-center overflow-hidden mx-auto sm:px-10 px-5">
+    <main className="relative bg-shadow flex flex-col justify-center items-center overflow-hidden mx-auto sm:px-10 px-5 pt-56"> {/* Added pt-16 to offset Navbar height */}
       <div>
-        <FloatingNav navItems={ navItems} />
+        <FloatingNav navItems={navItems} />
+        <Navbar /> {/* Add Navbar for large screens */}
         <Hero />
         <Grid />
         <RecentProjects />
         <Clients />
         <Experience />
-        <Process  />
+        <Process />
         <Pricing />
+        <SummonMjolnir />
         <Footer />
       </div>
     </main>
-    
   );
 }

@@ -1,5 +1,6 @@
 import { workExperience } from '@/data'
 import React from 'react'
+import Image from 'next/image'
 import { Button } from './ui/MovingBorders'
 
 const Experience = () => {
@@ -15,33 +16,33 @@ const Experience = () => {
                 <Button
                     key={card.id}
                     duration={Math.floor(Math.random() * 1000) + 2500}
-                    borderRadius='1.75rem'
+                    borderRadius='1.75rem' // Increased border radius for rounder edges
                     style={{
                         background: 'rgb(22,22,22)',
-                        backgroundColor: 'linear-gradient(90deg, rgba(22,22,22,1) 0%, rgba(64,0,0,1) 70%, rgba(80,80,80,1) 100%)',
-                        
+                        backgroundImage: 'linear-gradient(90deg, rgba(216, 122, 0, 1) 0%, rgba(192, 192, 192, 1) 50%, rgba(255, 215, 0, 1) 100%)', // Orange/Bronze to Silver to Gold
+                        minHeight: '250px', // Uniform height for all viewports
+                        maxHeight: '300px', // Cap height for consistency
+                        borderRadius: '1.75rem', // Ensure consistent rounding with Button component
                     }}
-                    className="flex-1 text-white border-white[0.1] dark:border-silver-100 bg-shadow"
+                    className="flex-1 text-white border-none dark:border-none bg-shadow flex items-center p-4" // Removed border
                 >
-                    <div className="flex lg:flex-row flex-col lg:items-center p-3 py-6 md:p-5 lg:p-10 gap-4">
-                        <img 
-                            src={card.thumbnail} 
-                            alt={card.thumbnail}
-                            className="lg:w-32 md:w-20 w-16" 
+                        <Image
+                            src={card.thumbnail}
+                            alt={card.title}
+                            width={96} // Reduced size for better fit
+                            height={96} // Reduced size for better fit
+                            className="lg:w-24 md:w-20 w-16 object-cover rounded-lg" // Rounded image to match container
                         />
-                            <div className="lg:ms-5">
-                                <h1 className="text-start text-xl md:text-2xl font-bold text-gold">
-                                    {card.title}
-                                </h1>
-                                <p className="text-start text-lg text-silver-100 mt-3 font-semibold">
-                                    {card.desc}
-                                </p>
-                            </div>                         
-                    </div>
-
+                        <div className="ms-4 flex-1">
+                            <h1 className="text-start text-xl md:text-2xl font-bold text-gold">
+                                {card.title}
+                            </h1>
+                            <p className="text-start text-sm md:text-base text-silver-100 mt-2 font-semibold line-clamp-3">
+                                {card.desc}
+                            </p>
+                        </div>                         
                 </Button>
             ))}
-            
         </div>
     </div>
   )
