@@ -59,7 +59,7 @@ export const FloatingNav = ({
           duration: 0.2,
         }}
         className={cn(
-          "flex max-w-fit fixed top-10 inset-x-0 mx-auto border dark:border-white/[0.2] rounded-lg bg-shadow z-[5000] px-10 py-5 items-center justify-center space-x-4",
+          "flex max-w-fit fixed top-10 inset-x-0 mx-auto border dark:border-white/[0.2] rounded-lg bg-shadow z-[5000] px-10 py-5 items-center justify-center space-x-2",
           className,
           "lg:hidden" // Hide on large screens (lg breakpoint and up)
         )}

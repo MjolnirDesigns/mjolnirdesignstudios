@@ -122,11 +122,11 @@ export const BentoGridItem = ({
                     <div className="flex flex-col gap-2 lg:gap-4">
                         {['ExpressJS','NextJS', 'ReactJS', 'TypeScript'].map
                         ((item) => (
-                            <span key={item} className="py-2 lg:py-4 lg:px-3 px-3 text-xs lg:text-base opacity-50 lg:opacity-100 rounded-lg text-center bg-[#C0C0C0]">
+                            <span key={item} className="py-2 lg:py-4 lg:px-3 px-3 text-xs lg:text-base opacity-70 lg:opacity-100 rounded-lg text-center bg-[#717171]">
                                 {item}
                             </span>
                         ))}
-                        <span className="py-4 px-3 rounded-lg text-center bg-[#C0C0C0]" />
+                        <span className="py-4 px-3 rounded-lg text-center bg-[#717171]" />
                     </div>
 
                     <div className="flex flex-col gap-2 lg:gap-4">

@@ -57,10 +57,10 @@ const SummonUs = () => {
       <h1 className="heading text-silver-100 text-4xl font-bold text-center mb-12">
         Summon Mjolnir Design Studios
       </h1>
-      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-6"> {/* Increased max width */}
+      <form onSubmit={handleSubmit} className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto space-y-6 px-4 sm:px-6 md:px-8 lg:px-0">
         {/* Name Input */}
         <div>
-          <label htmlFor="name" className="block text-lg font-medium text-gray-300 mb-2"> {/* Larger text */}
+          <label htmlFor="name" className="block text-lg font-medium text-gray-300 mb-2 text-left sm:text-center md:text-left">
             Name
           </label>
           <input
@@ -70,13 +70,13 @@ const SummonUs = () => {
             value={formData.name}
             onChange={handleInputChange}
             required
-            className="w-full px-6 py-3 rounded-lg bg-black/30 border border-white/10 text-xl text-white focus:outline-none focus:border-gold" //* Wider and larger text */}
+            className="w-full px-6 py-3 rounded-lg bg-black/30 border border-white/10 text-xl text-white focus:outline-none focus:border-gold mx-auto"
           />
         </div>
 
         {/* Email Input */}
         <div>
-          <label htmlFor="email" className="block text-lg font-medium text-gray-300 mb-2"> {/* Larger text */}
+          <label htmlFor="email" className="block text-lg font-medium text-gray-300 mb-2 text-left sm:text-center md:text-left">
             Email Address
           </label>
           <input
@@ -86,16 +86,16 @@ const SummonUs = () => {
             value={formData.email}
             onChange={handleInputChange}
             required
-            className="w-full px-6 py-3 rounded-lg bg-black/30 border border-white/10 text-xl text-white focus:outline-none focus:border-gold" //* Wider and larger text */}
+            className="w-full px-6 py-3 rounded-lg bg-black/30 border border-white/10 text-xl text-white focus:outline-none focus:border-gold mx-auto"
           />
         </div>
 
         {/* Services Checkboxes */}
         <div>
-          <label className="block text-lg font-medium text-gray-300 mb-2"> {/* Larger text */}
+          <label className="block text-lg font-medium text-gray-300 mb-2 text-left sm:text-center md:text-left">
             Services Requested
           </label>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 place-items-start sm:place-items-center md:place-items-start mx-auto">
             {servicesOptions.map((service) => (
               <div key={service} className="flex items-center">
                 <input
@@ -104,9 +104,9 @@ const SummonUs = () => {
                   value={service}
                   checked={formData.services.includes(service)}
                   onChange={handleCheckboxChange}
-                  className="mr-3 h-5 w-5" // Slightly larger checkbox
+                  className="mr-3 h-5 w-5 accent-gold"
                 />
-                <label htmlFor={service} className="text-lg text-gray-300"> {/* Larger text */}
+                <label htmlFor={service} className="text-lg text-gray-300">
                   {service}
                 </label>
               </div>
@@ -116,7 +116,7 @@ const SummonUs = () => {
 
         {/* Message Textarea */}
         <div>
-          <label htmlFor="message" className="block text-lg font-medium text-gray-300 mb-2"> {/* Larger text */}
+          <label htmlFor="message" className="block text-lg font-medium text-gray-300 mb-2 text-left sm:text-center md:text-left">
             Message
           </label>
           <textarea
@@ -124,17 +124,17 @@ const SummonUs = () => {
             name="message"
             value={formData.message}
             onChange={handleInputChange}
-            rows={5} // Increased rows for more space
+            rows={5}
             required
-            className="w-full px-6 py-3 rounded-lg bg-black/30 border border-white/10 text-xl text-white focus:outline-none focus:border-gold" //* Wider and larger text */}
+            className="w-full px-6 py-3 rounded-lg bg-black/30 border border-white/10 text-xl text-white focus:outline-none focus:border-gold mx-auto"
           />
         </div>
 
         {/* Submit Button */}
-        <div className="text-center"> {/* Center the button */}
+        <div className="text-center">
           <ShimmerButton
             title="Send Request"
-            otherClasses="w-64" // Fixed width for centering, adjust as needed
+            otherClasses="w-64"
           />
         </div>
       </form>

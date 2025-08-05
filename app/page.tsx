@@ -13,7 +13,7 @@ import { navItems } from "@/data";
 
 export default function Home() {
   return (
-    <main className="relative bg-shadow flex flex-col justify-center items-center overflow-hidden mx-auto sm:px-10 px-5 pt-56"> {/* Added pt-16 to offset Navbar height */}
+    <main className="relative bg-shadow flex flex-col justify-center items-center overflow-hidden mx-auto xs:pt-2 sm:px-2 px-4 md:pt-56"> {/* Added pt-16 to offset Navbar height */}
       <div>
         <FloatingNav navItems={navItems} />
         <Navbar /> {/* Add Navbar for large screens */}

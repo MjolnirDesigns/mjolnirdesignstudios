@@ -12,17 +12,19 @@
     "@lottiefiles/dotlottie-react": "^0.13.0",
     "@react-three/drei": "^9.114.0",
     "@react-three/fiber": "^8.18.0",
-    "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.53.0",
     "@types/three": "^0.163.0",
     "clsx": "^2.1.1",
+    "core-js": "^3.36.1",
     "framer-motion": "^12.4.7",
     "lucide-react": "^0.365.0",
     "mini-svg-data-uri": "^1.4.4",
     "motion": "^12.4.3",
-    "next": "^14.2.24",
+    "next": "^14.2.31",
     "next-auth": "^4.24.11",
     "next-themes": "^0.4.4",
+    "punycode": "^2.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.4.0",
@@ -30,7 +32,8 @@
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.173.0",
-    "three-globe": "^2.41.12"
+    "three-globe": "^2.41.12",
+    "three-mesh-bvh": "^0.8.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -41,16 +44,16 @@
     "@types/three": "^0.173.0",
     "autoprefixer": "^10.0.1",
     "cspell": "^9.2.0",
-    "eslint": "^9",
-    "eslint-config-next": "15.1.7",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.31",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },
   "resolutions": {
-    "next": "^14.2.24"
+    "next": "^14.2.31"
   },
   "overrides": {
-    "next": "^14.2.24"
+    "next": "^14.2.31"
   }
 }
