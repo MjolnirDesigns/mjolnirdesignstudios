@@ -1,0 +1,6 @@
+PROPRIETARY LICENSE
+Copyright (c) 2025 Mjolnir Design Studios LLC
+
+All rights reserved. This software and its source code are the confidential and proprietary information of Mjolnir Design Studios LLC ("MDS"). Unauthorized copying, modification, distribution, or use of this software, in whole or in part, is strictly prohibited without prior written consent from MDS. This software is provided for internal use by MDS and its authorized clients only.
+
+Contact: contact@mjolnirdesignstudios.com
