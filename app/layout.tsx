@@ -14,22 +14,48 @@ export const metadata: Metadata = {
     default: "Mjolnir Design Studios",
     template: "%s | Mjolnir Design Studios",
   },
+  description: "For Midgard!",
+  keywords: [
+    "Design",
+    "Digital Design",
+    "Hostinger",
+    "Mjolnir",
+    "Mjolnir Design Studios",
+    "Powerful Design",
+    "UI Design",
+    "UX Design",
+    "UI/UX Design",
+    "Web Design",
+    "Web Design Services",
+    "Web Development",
+    "Web Development Services",
+  ],
+  openGraph: {
+    title: "Mjolnir Design Studios",
     description: "For Midgard!",
-    keywords: [
-      "Design",
-      "Digital Design",
-      "Hostinger",
-      "Mjolnir",
-      "Mjolnir Design Studios",
-      "Powerful Design",
-      "UI Design",
-      "UX Design",
-      "UI/UX Design",
-      "Web Design",
-      "Web Design Services",
-      "Web Development",
-      "Web Development Services",
+    url: "https://mjolnirdesignstudios.com", // Replace with your actual domain
+    siteName: "Mjolnir Design Studios",
+    images: [
+      {
+        url: "/images/mjolnir-preview.jpg", // Replace with your preview image path in /public
+        width: 1200,
+        height: 630,
+        alt: "Mjolnir Design Studios Preview Banner",
+      },
     ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mjolnir Design Studios",
+    description: "For Midgard!",
+    images: ["/images/mjolnir-high-resolution-logo-transparent.png"], // Replace with your preview image path in /public
+  },
+  icons: {
+    icon: "/icons/triquetra_gold_512px.png", // Path to your favicon in /public
+    shortcut: "/icons/triquetra_gold_512px.png", // Optional: for shortcut icon
+  },
 };
 
 export default function RootLayout({

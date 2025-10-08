@@ -1,11 +1,18 @@
 {
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
   "version": "0.2",
   "language": "en",
   "words": [
     "Mjolnir", // Ignore your brand name
+    "Mjölnir", // Nordic spelling
+    "Triqueta", // Design element
+    "Vercel", // Deployment platform
+    "Hostinger", // Hosting provider
+    "clientlayout", // Component file
     "BiFrost", // Norse term
     "Midgard", // Norse term
     "Asgard", // Norse term
+    "Asgardian",
     "Yggdrasil", // Norse term
     "Valkyries", // From testimonials
     "Gungnir", // From testimonials
@@ -20,7 +27,47 @@
     "Thor", // Common Norse
     "nextjs", // Common tech term
     "tailwindcss", // Common tech term
-    "framer" // For Framer Motion
+    "framer", // For Framer Motion
+    "Wizerd",
+    "mjolnirui",
+    "subpages",
+    "Muspelheim", // Norse term
+    "Svartalfheim", // Norse term
+    "Norns",
+    "Nornir", // Norse term
+    "Jotunheim", // Norse term
+    "Vanaheim", // Norse term
+    "Alfheim",  // Norse term
+    "ASIC", // Application-Specific Integrated Circuit
+    "GPU", // Graphics Processing Unit
+    "Bitcoiner",
+    "Eitri", // Dwarven King
+    "Dwarven",
+    "Xicaru", // Secret Project
+    "XRPL", // XRP Ledger
+    "MOASS", // Acronym for "Mother of All Short Squeezes"
+    "Noobs", // Slang for new users
+    "HODL", // Cryptocurrency slang
   ],
-  "ignorePaths": ["node_modules/**", ".next/**", ".gitignore"]
+  "ignorePaths": [
+    "node_modules/**",
+    ".next/**",
+    "out/**",
+    "public/**",
+    "*.md",
+    ".gitignore",
+    ".env",
+    "*.log",
+    "*.tmp",
+    "*.bak"
+  ],
+  "dictionaries": [
+    "en-us"
+  ],
+  "enableFiletypes": [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact"
+  ]
 }

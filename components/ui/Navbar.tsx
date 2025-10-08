@@ -9,6 +9,7 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
+import { navItems } from "@/data";
 
 const Navbar = () => {
   const { scrollYProgress } = useScroll();
@@ -54,28 +55,33 @@ const Navbar = () => {
           "lg:flex" // Show on large screens (lg breakpoint and up)
         )}
       >
-        {/* Logo/Icon Avatar (Left) */}
-        <div className="flex-shrink-0 flex items-center space-x-2">
-          <Image
-            src="/mjolnir-high-resolution-logo-transparent.png" // Updated to correct relative path
-            alt="Mjolnir Logo"
-            width={124}
-            height={64}
-            className="rounded-full"
-          />
-          {/* Optional Text Logo - Uncomment and adjust if needed */}
-          {/* <span className="text-xl font-bold text-gold">Mjolnir Design</span> */}
-        </div>
+        {/* Logo/Icon Avatar (Left) - Clickable with Animation */}
+        <Link href="/" className="flex-shrink-0 flex items-center space-x-2 group">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <Image
+              src="/mjolnir-high-resolution-logo-transparent.png"
+              alt="Mjolnir Logo"
+              width={124}
+              height={64}
+              className="rounded-full cursor-pointer transition-transform"
+            />
+          </motion.div>
+          {/* Optional Text Logo */}
+          {/* <span className="text-xl font-bold text-gold group-hover:text-[#EFBF04] transition-colors">Mjolnir Design</span> */}
+        </Link>
 
         {/* Navigation Links (Center) */}
         <div className="flex-1 flex justify-center items-center space-x-6">
-          {["About", "Projects", "Testimonials", "Pricing", "Contact"].map((item) => (
+          {navItems.map((item) => (
             <Link
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              className="text-base text-neutral-600 dark:text-neutral-50 hover:text-gold hover:bg-gold/10 rounded-md px-2 py-1 transition duration-200"
+              key={item.name}
+              href={item.link}
+              className="text-xl font-semibold text-neutral-600 dark:text-neutral-50 hover:text-gold hover:bg-gold/10 rounded-md px-2 py-1 transition duration-200"
             >
-              {item}
+              {item.name}
             </Link>
           ))}
         </div>

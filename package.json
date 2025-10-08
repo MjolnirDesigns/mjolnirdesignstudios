@@ -9,9 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
     "@lottiefiles/dotlottie-react": "^0.13.0",
     "@react-three/drei": "^9.114.0",
     "@react-three/fiber": "^8.18.0",
+    "@stripe/react-stripe-js": "^3.9.0",
+    "@stripe/stripe-js": "^7.8.0",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.53.0",
     "@types/three": "^0.163.0",
@@ -29,6 +32,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^5.4.0",
     "react-lottie": "^1.2.10",
+    "stripe": "^18.4.0",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.173.0",
@@ -41,6 +45,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-lottie": "^1.2.10",
+    "@types/stripe": "^8.0.416",
     "@types/three": "^0.173.0",
     "autoprefixer": "^10.0.1",
     "cspell": "^9.2.0",
