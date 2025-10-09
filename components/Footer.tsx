@@ -73,7 +73,7 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
         </div>
       </div>
 
-      <div className="flex flex-col items-center mt-12 relative z-[1] pb-6">
+      <div className="flex flex-col items-center mt-16 relative z-[1] pb-6">
         <div className="flex flex-row justify-center gap-4 mb-4">
           {socialMedia.map((profile) => (
             <motion.div
@@ -82,7 +82,7 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 cursor-pointer flex justify-center items-center bg-transparent border border-gold rounded-lg text-white"
             >
-              <a href={profile.link} target="_blank" rel="noopener noreferrer">
+              <a href={profile.link} target="_blank" rel="noopener noreferrer" title={`Profile ${profile.id}`}>
                 <Image
                   src={profile.img}
                   alt={`Profile ${profile.id}`}

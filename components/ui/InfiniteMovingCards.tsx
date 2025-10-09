@@ -6,7 +6,7 @@ import Image from "next/image"; // Use next/image
 export const InfiniteMovingCards = ({
   items,
   direction = "left",
-  speed = "fast",
+  speed = "slow",
   pauseOnHover = true,
   className,
 }: {
@@ -76,66 +76,68 @@ export const InfiniteMovingCards = ({
   }, [addAnimation]);
 
   return (
-    <div
-      ref={containerRef}
-      className={cn(
-        "scroller relative h-auto z-20 w-screen overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]",
-        className
-      )}
-    >
-      <ul
-        ref={scrollerRef}
+    <div className="py-20" id="testimonials">
+      <div
+        ref={containerRef}
         className={cn(
-          "flex min-w-full shrink-0 gap-16 py-4 w-max flex-nowrap",
-          start && "animate-scroll",
-          pauseOnHover && "hover:[animation-play-state:paused]"
+          "scroller relative h-auto z-20 w-screen overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]",
+          className
         )}
       >
-        {items.map((item, idx) => (
-          <li
-            className="w-[350px] max-w-full h-[300px] relative rounded-2xl border border-b-0 flex-shrink-0 border-white/[0.1] p-4 md:p-8 md:w-[450px]"
-            style={{
-              background: "rgb(22,22,22)",
-              backgroundColor:
-                "linear-gradient(90deg, rgba(22,22,22,1) 0%, rgba(64,0,0,1) 70%, rgba(80,80,80,1) 100%)",
-            }}
-            key={idx}
-          >
-            <blockquote>
-              <div
-                aria-hidden="true"
-                className="user-select-none -z-1 pointer-events-none absolute -left-0.5 -top-0.5 h-[calc(100%_+_4px)] w-[calc(100%_+_4px)]"
-              ></div>
-              <span className="relative z-20 text-lg md:text-lg leading-[1.6] text-white font-normal">
-                {item.quote}
-              </span>
-              <div className="relative z-20 mt-4 flex flex-row items-center">
-                <div className="flex flex-col gap-1">
-                  <div className="me-3">
-                    {item.image ? (
-                      <Image
-                        src={item.image}
-                        alt={item.name || "profile"}
-                        width={50}
-                        height={50}
-                        className="object-cover rounded-full"
-                      />
-                    ) : null}
+        <ul
+          ref={scrollerRef}
+          className={cn(
+            "flex min-w-full shrink-0 gap-16 py-4 w-max flex-nowrap",
+            start && "animate-scroll",
+            pauseOnHover && "hover:[animation-play-state:paused]"
+          )}
+        >
+          {items.map((item, idx) => (
+            <li
+              className="w-[350px] max-w-full h-[300px] relative rounded-2xl border border-b-0 flex-shrink-0 border-white/[0.1] p-4 md:p-8 md:w-[450px]"
+              style={{
+                background: "rgb(22,22,22)",
+                backgroundColor:
+                  "linear-gradient(90deg, rgba(22,22,22,1) 0%, rgba(64,0,0,1) 70%, rgba(80,80,80,1) 100%)",
+              }}
+              key={idx}
+            >
+              <blockquote>
+                <div
+                  aria-hidden="true"
+                  className="user-select-none -z-1 pointer-events-none absolute -left-0.5 -top-0.5 h-[calc(100%_+_4px)] w-[calc(100%_+_4px)]"
+                ></div>
+                <span className="relative z-20 text-lg md:text-lg leading-[1.6] text-white font-normal">
+                  {item.quote}
+                </span>
+                <div className="relative z-20 mt-4 flex flex-row items-center">
+                  <div className="flex flex-col gap-1">
+                    <div className="me-3">
+                      {item.image ? (
+                        <Image
+                          src={item.image}
+                          alt={item.name || "profile"}
+                          width={50}
+                          height={50}
+                          className="object-cover rounded-full"
+                        />
+                      ) : null}
+                    </div>
+                    <span className="flex flex-col gap-1">
+                      <span className="text-xl leading-[1.6] text-gold font-bold">
+                        {item.name}
+                      </span>
+                      <span className="text-md leading-[1.6] text-silver-100 font-normal">
+                        {item.title}
+                      </span>
+                    </span>
                   </div>
-                  <span className="flex flex-col gap-1">
-                    <span className="text-xl leading-[1.6] text-gold font-bold">
-                      {item.name}
-                    </span>
-                    <span className="text-md leading-[1.6] text-silver-100 font-normal">
-                      {item.title}
-                    </span>
-                  </span>
                 </div>
-              </div>
-            </blockquote>
-          </li>
-        ))}
-      </ul>
+              </blockquote>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

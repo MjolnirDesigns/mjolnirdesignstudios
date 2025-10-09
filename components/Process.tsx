@@ -4,17 +4,16 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CanvasRevealEffect } from "@/components/ui/CanvasRevealEffect";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
-
 const Process = () => {
   return (
-    <section className="w-full py-20">
-      <h1 className="heading text-silver-100">
+    <section className="w-full mx-auto py-20">
+      <h1 className="heading text-silver-100 w-full md:w-3/4 lg:w-2/3 mx-auto text-center">
         Our Journey to Lift the Mighty{" "}
         <span className="text-gold">Mjolnir!</span>
       </h1>
       <br />
       <div className="flex flex-col items-center max-lg:mt-10">
-        <div className="my-20 flex flex-col lg:flex-row items-center justify-center bg-shadow dark:bg-shadow w-full gap-12 mx-auto px-8 text-xl">
+        <div className="my-20 flex flex-col lg:flex-row items-center justify-center bg-shadow dark:bg-shadow w-full md:w-3/4 lg:w-2/3 mx-auto gap-12 px-8 text-xl">
           <Card
             title="Ideation"
             icon={<Lightning />}
@@ -23,7 +22,7 @@ const Process = () => {
             <CanvasRevealEffect
               animationSpeed={5.1}
               containerClassName="bg-shadow"
-              colors={["#C0C0C0"]} // Silver
+              colors={["#C0C0C0"]}
             />
           </Card>
           <Card
@@ -34,10 +33,9 @@ const Process = () => {
             <CanvasRevealEffect
               animationSpeed={3}
               containerClassName="bg-shadow"
-              colors={["#FF9900"]} // Orange
+              colors={["#FF9900"]}
               dotSize={2}
             />
-            {/* Radial gradient for the cute fade */}
             <div className="absolute inset-0 [mask-image:radial-gradient(400px_at_center,white,transparent)] bg-black/50 dark:bg-black/50" />
           </Card>
           <Card
@@ -48,7 +46,7 @@ const Process = () => {
             <CanvasRevealEffect
               animationSpeed={3}
               containerClassName="bg-shadow"
-              colors={["#FFD700"]} // Gold
+              colors={["#FFD700"]}
             />
           </Card>
         </div>
@@ -73,7 +71,7 @@ const Card = ({
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="border border-black/[0.2] group/canvas-card flex items-center justify-center dark:border-white/[0.2] max-w-sm w-full mx-auto p-4 relative h-[30rem] rounded-3xl"
+      className="border border-black/[0.2] group/canvas-card flex items-center justify-center dark:border-white/[0.2] max-w-md w-full lg:max-w-md xl:max-w-lg mx-auto p-4 relative h-[30rem] rounded-3xl"
     >
       <Icon className="absolute h-6 w-6 -top-3 -left-3 dark:text-white text-black" />
       <Icon className="absolute h-6 w-6 -bottom-3 -left-3 dark:text-white text-black" />
@@ -109,18 +107,17 @@ const Card = ({
 
 const Lightning = () => (
   <DotLottieReact
-    src="https://lottie.host/a65316ec-476f-4a42-a50e-cec28afe74fa/CmhZVsmlrb.lottie"
+    src="/Animations/LightningVFX.json"
     loop={true}
     autoplay={true}
-    style={{ width: "40px", height: "40px" }} // Match the h-10 w-10 size of AceternityIcon
+    style={{ width: "40px", height: "40px" }}
     className="text-white dark:text-white group-hover/canvas-card:text-white"
   />
 );
 
 interface IconProps {
   className?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any; // For other SVG props
+  [key: string]: unknown;
 }
 
 export const Icon = ({ className, ...rest }: IconProps) => {
@@ -140,4 +137,3 @@ export const Icon = ({ className, ...rest }: IconProps) => {
 };
 
 export default Process;
-

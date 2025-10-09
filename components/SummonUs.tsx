@@ -1,7 +1,6 @@
 "use client";
-
 import React, { useState } from 'react';
-import ShimmerButton from '@/components/ui/ShimmerButton'; // Assume this is your ShimmerButton component
+import ShimmerButton from '@/components/ui/ShimmerButton';
 
 type FormData = {
   name: string;
@@ -57,8 +56,7 @@ const SummonUs = () => {
       <h1 className="heading text-silver-100 text-4xl font-bold text-center mb-12">
         Summon Mjolnir Design Studios
       </h1>
-      <form onSubmit={handleSubmit} className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto space-y-6 px-4 sm:px-6 md:px-8 lg:px-0">
-        {/* Name Input */}
+      <form onSubmit={handleSubmit} className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto space-y-6 px-4 sm:px-6 md:px-8 lg:px-0">
         <div>
           <label htmlFor="name" className="block text-lg font-medium text-gray-300 mb-2 text-left sm:text-center md:text-left">
             Name
@@ -70,11 +68,9 @@ const SummonUs = () => {
             value={formData.name}
             onChange={handleInputChange}
             required
-            className="w-full px-6 py-3 rounded-lg bg-black/30 border border-white/10 text-xl text-white focus:outline-none focus:border-gold mx-auto"
+            className="w-full px-6 py-3 xl:px-8 xl:py-4 rounded-lg bg-black/30 border border-white/10 text-xl text-white focus:outline-none focus:border-gold mx-auto"
           />
         </div>
-
-        {/* Email Input */}
         <div>
           <label htmlFor="email" className="block text-lg font-medium text-gray-300 mb-2 text-left sm:text-center md:text-left">
             Email Address
@@ -86,11 +82,9 @@ const SummonUs = () => {
             value={formData.email}
             onChange={handleInputChange}
             required
-            className="w-full px-6 py-3 rounded-lg bg-black/30 border border-white/10 text-xl text-white focus:outline-none focus:border-gold mx-auto"
+            className="w-full px-6 py-3 xl:px-8 xl:py-4 rounded-lg bg-black/30 border border-white/10 text-xl text-white focus:outline-none focus:border-gold mx-auto"
           />
         </div>
-
-        {/* Services Checkboxes */}
         <div>
           <label className="block text-lg font-medium text-gray-300 mb-2 text-left sm:text-center md:text-left">
             Services Requested
@@ -113,8 +107,6 @@ const SummonUs = () => {
             ))}
           </div>
         </div>
-
-        {/* Message Textarea */}
         <div>
           <label htmlFor="message" className="block text-lg font-medium text-gray-300 mb-2 text-left sm:text-center md:text-left">
             Message
@@ -126,16 +118,11 @@ const SummonUs = () => {
             onChange={handleInputChange}
             rows={5}
             required
-            className="w-full px-6 py-3 rounded-lg bg-black/30 border border-white/10 text-xl text-white focus:outline-none focus:border-gold mx-auto"
+            className="w-full px-6 py-3 xl:px-8 xl:py-4 rounded-lg bg-black/30 border border-white/10 text-xl text-white focus:outline-none focus:border-gold mx-auto"
           />
         </div>
-
-        {/* Submit Button */}
         <div className="text-center">
-          <ShimmerButton
-            title="Send Request"
-            otherClasses="w-64"
-          />
+          <ShimmerButton title="Send Request" otherClasses="w-64 xl:w-80" />
         </div>
       </form>
     </section>
