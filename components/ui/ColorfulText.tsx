@@ -27,7 +27,7 @@ export function ColorfulText({ text }: { text: string }) {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [colors]);
 
   return text.split("").map((char, index) => (
     <motion.span

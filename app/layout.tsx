@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geo } from "next/font/google";
 import "./globals.css";
-import ClientLayout from "./clientlayout"; // Import new client component
+import ClientLayout from "./clientlayout";
 
 const geo = Geo({
   subsets: ["latin"],
@@ -10,6 +10,7 @@ const geo = Geo({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://mjolnirdesignstudios.com'),
   title: {
     default: "Mjolnir Design Studios",
     template: "%s | Mjolnir Design Studios",
@@ -33,14 +34,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Mjolnir Design Studios",
     description: "For Midgard!",
-    url: "https://mjolnirdesignstudios.com", // Replace with your actual domain
+    url: "https://mjolnirdesignstudios.com",
     siteName: "Mjolnir Design Studios",
     images: [
       {
-        url: "/images/mjolnir-preview.jpg", // Replace with your preview image path in /public
+        url: "/Logos/Mjolnir_ElectricBlue47_Thumbnail.png",
         width: 1200,
         height: 630,
-        alt: "Mjolnir Design Studios Preview Banner",
+        alt: "Mjolnir Design Studios Logo",
       },
     ],
     locale: "en_US",
@@ -50,11 +51,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Mjolnir Design Studios",
     description: "For Midgard!",
-    images: ["/images/mjolnir-high-resolution-logo-transparent.png"], // Replace with your preview image path in /public
+    images: ["/Logos/Mjolnir_ElectricBlue47_Thumbnail.png"],
   },
   icons: {
-    icon: "/icons/triquetra_gold_512px.png", // Path to your favicon in /public
-    shortcut: "/icons/triquetra_gold_512px.png", // Optional: for shortcut icon
+    icon: "/icons/triquetra_gold_512px.png",
+    shortcut: "/icons/triquetra_gold_512px.png",
   },
 };
 
@@ -66,7 +67,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={geo.className}>
-        <ClientLayout>{children}</ClientLayout> {/* Wrap with client component */}
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
