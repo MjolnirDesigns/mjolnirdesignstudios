@@ -14,7 +14,7 @@ const Process = () => {
       </h1>
       <br />
       <div className="flex flex-col items-center max-lg:mt-10">
-        <div className="my-20 flex flex-col lg:flex-row items-center justify-center bg-shadow dark:bg-shadow w-full gap-4 mx-auto px-8 text-xl">
+        <div className="my-20 flex flex-col lg:flex-row items-center justify-center bg-shadow dark:bg-shadow w-full gap-12 mx-auto px-8 text-xl">
           <Card
             title="Ideation"
             icon={<Lightning />}
