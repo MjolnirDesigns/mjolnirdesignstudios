@@ -127,11 +127,13 @@ export const FloatingNav = ({
         {/* Center: Logo */}
         <Link href="/" className="hover:shadow-[0_0_10px_rgba(0,191,255,0.6)] transition-shadow duration-300">
           <Image 
-            src="/logos/mjolnir_logo_transparent.png" // Update this path as needed when uploading to Hostinger (e.g., to your public assets folder)
+            src="/Logos/mjolnir_logo_transparent.png" // Matches FTP case; update if renaming folder
             alt="Mjolnir Logo" 
             width={180} 
             height={36} 
-            className="object-contain"
+            className="object-contain" // Add responsive Tailwind if needed, e.g., "md:w-[180px] w-[120px]" for mobile scaling
+            sizes="(max-width: 768px) 120px, 180px" // Smaller on mobile to fit floating nav better
+            priority // Eager load for nav visibility
           />
         </Link>
 
