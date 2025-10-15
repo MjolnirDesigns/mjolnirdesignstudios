@@ -54,8 +54,8 @@ export const metadata: Metadata = {
     images: ["/Logos/Mjolnir_ElectricBlue47_Thumbnail.png"],
   },
   icons: {
-    icon: "/icons/triquetra_gold_512px.png",
-    shortcut: "/icons/triquetra_gold_512px.png",
+    icon: "/Icons/triquetra_gold_512px.png",
+    shortcut: "/Icons/triquetra_gold_512px.png",
   },
 };
 

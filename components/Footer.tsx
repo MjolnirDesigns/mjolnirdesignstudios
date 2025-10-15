@@ -57,7 +57,6 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
               <li><Link href="/help-center" className="text-gray-400 lg:hover:text-gold transition block">Help Center</Link></li>
               <li><Link href="/email-support" className="text-gray-400 lg:hover:text-gold transition block">Email Support</Link></li>
               <li><Link href="/faq" className="text-gray-400 lg:hover:text-gold transition block">FAQ</Link></li>
-              <li><Link href="/email-support" className="text-gray-400 lg:hover:text-gold transition block">Email Support</Link></li>
               <li><Link href="/web3" className="text-gray-400 lg:hover:text-gold transition block">Web3</Link></li>
             </ul>
           </div>

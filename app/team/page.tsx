@@ -21,24 +21,32 @@ const Team = () => {
       gsap.set(card, { transformPerspective: 1000, transformStyle: 'preserve-3d' });
       const mouseEnterHandler = () => {
         gsap.to(card, {
-          rotationX: 10,
-          scale: 1.02,
-          duration: 0.3,
-          ease: 'power2.out',
+          rotationX: 8,
+          rotationY: 8,
+          scale: 1.05,
+          boxShadow: '0 0 20px rgba(255, 215, 0, 0.7)',
+          duration: 0.4,
+          ease: 'power3.out',
         });
       };
       const mouseLeaveHandler = () => {
         gsap.to(card, {
           rotationX: 0,
+          rotationY: 0,
           scale: 1,
-          duration: 0.3,
-          ease: 'power2.in',
+          boxShadow: '0 0 0 rgba(255, 215, 0, 0)',
+          duration: 0.4,
+          ease: 'power3.in',
         });
       };
       card.addEventListener('mouseenter', mouseEnterHandler);
       card.addEventListener('mouseleave', mouseLeaveHandler);
+      // Cleanup event listeners on component unmount
+      return () => {
+        card.removeEventListener('mouseenter', mouseEnterHandler);
+        card.removeEventListener('mouseleave', mouseLeaveHandler);
+      };
     });
-    // Optionally, add cleanup logic here if needed
   }, []);
 
   return (
@@ -47,7 +55,7 @@ const Team = () => {
         <FloatingNav navItems={navItems} />
         <Navbar />
         <main className="flex-1 flex flex-col justify-center items-center mx-auto px-4 sm:px-2 relative z-10">
-          <div className="max-w-6xl pt-24 md:pt-28">
+          <div className="max-w-6xl pt-32 sm:pt-36 md:pt-40">
             <h1 className="text-4xl font-bold text-center mb-6 text-silver-100">
               Our Team of <span className="text-gold">Asgardians</span> at Mjolnir Design Studios
             </h1>
@@ -65,7 +73,7 @@ const Team = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.2 }}
-                    className="team-card bg-transparent rounded-lg p-6 shadow-none hover:shadow-[0_0_15px_rgba(255,215,0,0.5)] transition-all duration-300 text-center"
+                    className="team-card bg-transparent rounded-lg p-6 border-2 border-silver-300 shadow-none transition-all duration-300 text-center"
                   >
                     <div className="mx-auto mb-4">
                       <Image
@@ -77,7 +85,7 @@ const Team = () => {
                       />
                     </div>
                     <h2 className="text-2xl font-bold text-silver-100 mb-2">{member.name}</h2>
-                    <h3 className="text-lg font-semibold text-gray-300 mb-4">{member.role}</h3>
+                    <h3 className="text-lg font-semibold text-gold mb-4">{member.role}</h3>
                     {member.experience && (
                       <p className="text-sm text-gray-400 mb-4 italic">{member.experience}</p>
                     )}
@@ -100,7 +108,7 @@ const Team = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.2 + 0.4 }}
-                    className="team-card bg-transparent rounded-lg p-6 shadow-none hover:shadow-[0_0_15px_rgba(255,215,0,0.5)] transition-all duration-300 text-center"
+                    className="team-card bg-transparent rounded-lg p-6 border-2 border-silver-300 shadow-none transition-all duration-300 text-center"
                   >
                     <div className="mx-auto mb-4">
                       <Image
@@ -112,7 +120,7 @@ const Team = () => {
                       />
                     </div>
                     <h2 className="text-2xl font-bold text-silver-100 mb-2">{member.name}</h2>
-                    <h3 className="text-lg font-semibold text-gray-300 mb-4">{member.role}</h3>
+                    <h3 className="text-lg font-semibold text-gold mb-4">{member.role}</h3>
                     {member.experience && (
                       <p className="text-sm text-gray-400 mb-4 italic">{member.experience}</p>
                     )}

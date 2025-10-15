@@ -258,10 +258,10 @@ export const skills = [
 export const teamMembers = [
   {
     id: 1,
-    name: "Your Name", // President & Founder (replace with your real name)
+    name: "Christopher 'Master' Chiodo", // President & Founder (replace with your real name)
     role: "President & Founder",
     description: "The visionary leader of Mjolnir Design Studios, Christopher brings over 15 years of experience in business development, data analytics, finance and programming. His innovative designs and solutions are strongly inspired by Norse mythology.",
-    avatar: "/images/avatar-hero.jpg", // Your hero avatar image path
+    avatar: "/Images/avatar-hero.jpg", // Your hero avatar image path
     experience: "15+ years in UI/UX and Web Dev", // Optional experience summary
     skills: ["bitcoin", "gsap", "three", "re", "ts"] // 5 skills from global list
   },
@@ -270,7 +270,7 @@ export const teamMembers = [
     name: "Thor Odinson",
     role: "Senior Web Developer",
     description: "Thor brings years of experience in business and finance roles over many decades. Thor specializes in business operations, financial system management, and technology solutions which will allow Mjolnir to withstand the test of time.",
-    avatar: "/images/thor-avatar.jpg", // Placeholder
+    avatar: "/Images/thor-avatar.jpg", // Placeholder
     experience: "10 years in Web Development",
     skills: ["html", "css", "fm", "re", "ts"]
   },
@@ -279,7 +279,7 @@ export const teamMembers = [
     name: "Loki Laufeyson",
     role: "Vice President & Creative Director",
     description: "Loki, clever and innovative in his craft. Digital magic is his specialty and he brings mischief and mastery to every initiative.",
-    avatar: "/images/loki-avatar.jpg", // Placeholder; add to public/images
+    avatar: "/Images/loki-avatar.jpg", // Placeholder; add to public/images
     experience: "8 years in Creative Direction",
     skills: ["docker","figma", "next", "tail"]
   },
@@ -288,7 +288,7 @@ export const teamMembers = [
     name: "Balder the Brave",
     role: "Senior UI/UX Designer",
     description: "Sif crafts intuitive interfaces with a focus on user experience, blending artistry and functionality in every pixel.",
-    avatar: "/images/sif-avatar.jpg", // Placeholder
+    avatar: "/Images/sif-avatar.jpg", // Placeholder
     experience: "7 years in UI/UX",
     skills: ["blender","javascript","python", "replit"]
   },
@@ -297,7 +297,7 @@ export const teamMembers = [
     name: "Beta Ray Bill",
     role: "Senior Video & Animation Specialist",
     description: "Bill produces stunning videos and animations, with an eye for detail that captures every nuance.",
-    avatar: "/images/bill-avatar.jpg", // Placeholder
+    avatar: "/Images/bill-avatar.jpg", // Placeholder
     experience: "9 years in Video Production",
     skills: ["gsap","fm","supabase","three",]
   }
