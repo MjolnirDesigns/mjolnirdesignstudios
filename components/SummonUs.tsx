@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import ShimmerButton from '@/components/ui/ShimmerButton';
+import { ColorfulText } from '../components/ui/ColorfulText'; // Adjust path if needed
 
 type FormData = {
   name: string;
@@ -54,7 +55,7 @@ const SummonUs = () => {
   return (
     <section id="summon" className="py-20 bg-shadow text-silver">
       <h1 className="heading text-silver-100 text-4xl font-bold text-center mb-12">
-        Summon Mjolnir Design Studios
+        Open the <ColorfulText text="Bifrost!" />
       </h1>
       <form onSubmit={handleSubmit} className="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-4xl mx-auto space-y-6 px-4 sm:px-6 md:px-8 lg:px-0">
         <div>
