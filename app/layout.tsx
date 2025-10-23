@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     "Web Development Services",
   ],
   openGraph: {
-    title: "Mjolnir Design Studios",
+    title: "Mjolnir Forge Studios",
     description: "For Midgard!",
     url: "https://mjolnirdesignstudios.com",
     siteName: "Mjolnir Design Studios",
@@ -66,7 +66,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={geo.className}>
+      <body className={geo.className} style={{ minHeight: '100vh' }}> {/* Added min-height */}
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

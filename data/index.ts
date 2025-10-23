@@ -258,9 +258,9 @@ export const skills = [
 export const teamMembers = [
   {
     id: 1,
-    name: "Christopher 'Master' Chiodo", // President & Founder (replace with your real name)
+    name: "Christopher 'The Master' Chiodo", // President & Founder (replace with your real name)
     role: "President & Founder",
-    description: "The visionary leader of Mjolnir Design Studios, Christopher brings over 15 years of experience in business development, data analytics, finance and programming. His innovative designs and solutions are strongly inspired by Norse mythology.",
+    description: "The visionary leader of Mjolnir Design Studios, Christ brings 15+ years of experience in business development, consulting, data analytics, engineering, finance and programming. His innovative designs and solutions are strongly inspired by Norse mythology.",
     avatar: "/Images/avatar-hero.jpg", // Your hero avatar image path
     experience: "15+ years in UI/UX and Web Dev", // Optional experience summary
     skills: ["bitcoin", "gsap", "three", "re", "ts"] // 5 skills from global list
