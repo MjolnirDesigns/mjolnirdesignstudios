@@ -10,7 +10,7 @@ export const navItems = [
 export const gridItems = [
   {
     id: 1,
-    title: "Mjolnir, a tool to build! ",
+    title: "Mjolnir, A Tool to Build! ",
     description: "Mighty Designs!",
     className: "lg:col-span-3 md:col-span-6 md:row-span-4 lg:min-h-[60vh]",
     imgClassName: "w-[70%] h-auto max-w-full object-contain mx-auto",
@@ -20,7 +20,7 @@ export const gridItems = [
   },
   {
     id: 2,
-    title: "Servicing the nine realms!",
+    title: "Servicing the Nine Realms!",
     description: "For Midgard!",
     className: "lg:col-span-2 md:col-span-3 md:row-span-2",
     imgClassName: "",

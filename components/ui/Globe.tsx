@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Color, Scene, Fog, Vector3, AmbientLight, DirectionalLight, PointLight } from "three";
 import ThreeGlobe from "three-globe";
@@ -64,9 +64,9 @@ function Globe({ globeConfig, data }: WorldProps) {
   >(null);
   const [isMounted, setIsMounted] = useState(false);
   const globeRef = useRef<ThreeGlobe>(new ThreeGlobe());
-  const { scene } = useThree();
+  const { scene, gl } = useThree();
 
-  const defaultProps = {
+  const defaultProps = useMemo(() => ({
     pointSize: 1,
     atmosphereColor: "#ffffff",
     showAtmosphere: true,
@@ -81,7 +81,66 @@ function Globe({ globeConfig, data }: WorldProps) {
     rings: 1,
     maxRings: 3,
     ...globeConfig,
-  };
+  }), [globeConfig]);
+
+  const _buildMaterial = useCallback(() => {
+    const globeMaterial = globeRef.current.globeMaterial() as unknown as {
+      color: Color;
+      emissive: Color;
+      emissiveIntensity: number;
+      shininess: number;
+    };
+    globeMaterial.color = new Color(defaultProps.globeColor);
+    globeMaterial.emissive = new Color(defaultProps.emissive);
+    globeMaterial.emissiveIntensity = defaultProps.emissiveIntensity;
+    globeMaterial.shininess = defaultProps.shininess;
+  }, [defaultProps.emissive, defaultProps.emissiveIntensity, defaultProps.globeColor, defaultProps.shininess]);
+
+  const _buildData = useCallback(() => {
+    const arcs = data.filter((d) =>
+      d.startLat !== undefined && d.startLng !== undefined &&
+      d.endLat !== undefined && d.endLng !== undefined &&
+      d.arcAlt !== undefined && d.color !== undefined &&
+      !isNaN(d.startLat) && !isNaN(d.startLng) &&
+      !isNaN(d.endLat) && !isNaN(d.endLng) && !isNaN(d.arcAlt)
+    );
+    const points: {
+      size: number;
+      order: number;
+      color: (t: number) => string;
+      lat: number;
+      lng: number;
+    }[] = [];
+    for (let i = 0; i < arcs.length; i++) {
+      const arc = arcs[i];
+      const rgb = hexToRgb(arc.color);
+      if (rgb) {
+        points.push({
+          size: defaultProps.pointSize,
+          order: arc.order,
+          color: (t: number) => `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${1 - t})`,
+          lat: arc.startLat,
+          lng: arc.startLng,
+        });
+        points.push({
+          size: defaultProps.pointSize,
+          order: arc.order,
+          color: (t: number) => `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${1 - t})`,
+          lat: arc.endLat,
+          lng: arc.endLng,
+        });
+      }
+    }
+
+    const filteredPoints = points.filter(
+      (v, i, a) =>
+        a.findIndex((v2) =>
+          ["lat", "lng"].every((k) => v2[k as "lat" | "lng"] === v[k as "lat" | "lng"])
+        ) === i
+    );
+
+    setGlobeData(filteredPoints);
+  }, [data, defaultProps]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -93,89 +152,35 @@ function Globe({ globeConfig, data }: WorldProps) {
     return () => {
       scene.remove(currentGlobe);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scene]);
-
-  const _buildMaterial = () => {
-    const globeMaterial = globeRef.current.globeMaterial() as unknown as {
-      color: Color;
-      emissive: Color;
-      emissiveIntensity: number;
-      shininess: number;
-    };
-    globeMaterial.color = new Color(defaultProps.globeColor);
-    globeMaterial.emissive = new Color(defaultProps.emissive);
-    globeMaterial.emissiveIntensity = defaultProps.emissiveIntensity;
-    globeMaterial.shininess = defaultProps.shininess;
-  };
-
-  const _buildData = () => {
-    const arcs = data;
-    const points: {
-      size: number;
-      order: number;
-      color: (t: number) => string;
-      lat: number;
-      lng: number;
-    }[] = [];
-    for (let i = 0; i < arcs.length; i++) {
-      const arc = arcs[i];
-      const rgb = hexToRgb(arc.color) as { r: number; g: number; b: number };
-      points.push({
-        size: defaultProps.pointSize,
-        order: arc.order,
-        color: (t: number) => `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${1 - t})`,
-        lat: arc.startLat,
-        lng: arc.startLng,
-      });
-      points.push({
-        size: defaultProps.pointSize,
-        order: arc.order,
-        color: (t: number) => `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${1 - t})`,
-        lat: arc.endLat,
-        lng: arc.endLng,
-      });
-    }
-
-    const filteredPoints = points.filter(
-      (v, i, a) =>
-        a.findIndex((v2) =>
-          ["lat", "lng"].every(
-            (k) => v2[k as "lat" | "lng"] === v[k as "lat" | "lng"]
-          )
-        ) === i
-    );
-
-    setGlobeData(filteredPoints);
-  };
+  }, [scene, _buildData, _buildMaterial]);
 
   const startAnimation = useCallback(() => {
-    if (!globeRef.current || !globeData) return;
+    if (!globeRef.current || !globeData || !data.length) return;
 
     globeRef.current
       .arcsData(data)
-      .arcStartLat((d: object) => (d as Position).startLat * 1)
-      .arcStartLng((d: object) => (d as Position).startLng * 1)
-      .arcEndLat((d: object) => (d as Position).endLat * 1)
-      .arcEndLng((d: object) => (d as Position).endLng * 1)
-      .arcColor((d: object) => (d as Position).color)
-      .arcAltitude((d: object) => (d as Position).arcAlt * 1)
+      .arcStartLat((d: object) => (d as Position).startLat || 0)
+      .arcStartLng((d: object) => (d as Position).startLng || 0)
+      .arcEndLat((d: object) => (d as Position).endLat || 0)
+      .arcEndLng((d: object) => (d as Position).endLng || 0)
+      .arcColor((d: object) => (d as Position).color || "#ffffff")
+      .arcAltitude((d: object) => (d as Position).arcAlt || 0)
       .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
       .arcDashLength(defaultProps.arcLength)
-      .arcDashInitialGap((d: object) => (d as Position).order * 1)
+      .arcDashInitialGap((d: object) => ((d as Position).order || 0) * 1)
       .arcDashGap(15)
       .arcDashAnimateTime(() => defaultProps.arcTime);
 
     globeRef.current
       .pointsData(data)
-      .pointColor((d: object) => (d as Position).color)
+      .pointColor((d: object) => (d as Position).color || "#ffffff")
       .pointsMerge(true)
       .pointAltitude(0.0)
       .pointRadius(2);
 
     globeRef.current
       .ringsData([])
-      .ringColor((t: number) => data[t].color)
+      .ringColor((t: number) => (data[t] && data[t].color) || "#ffffff")
       .ringMaxRadius(defaultProps.maxRings)
       .ringPropagationSpeed(RING_PROPAGATION_SPEED)
       .ringRepeatPeriod(
@@ -207,16 +212,33 @@ function Globe({ globeConfig, data }: WorldProps) {
         data.length,
         Math.floor((data.length * 4) / 5)
       );
-
       globeRef.current.ringsData(
         globeData.filter((d, i) => numbersOfRings.includes(i))
       );
     }, 2000);
 
-    return () => {
-      clearInterval(interval);
-    };
+    return () => clearInterval(interval);
   }, [isMounted, globeData, data]);
+
+  useEffect(() => {
+    const handleContextLost = (event: Event) => {
+      event.preventDefault();
+      console.log("WebGL context lost, attempting recovery...");
+      if (globeRef.current) {
+        _buildMaterial();
+        startAnimation();
+      }
+    };
+    const glDomElement = gl.domElement;
+    if (glDomElement) {
+      glDomElement.addEventListener("webglcontextlost", handleContextLost);
+    }
+    return () => {
+      if (glDomElement) {
+        glDomElement.removeEventListener("webglcontextlost", handleContextLost);
+      }
+    };
+  }, [startAnimation, gl, _buildMaterial]);
 
   if (!isMounted) return null;
   return null;
@@ -261,18 +283,24 @@ export function WebGLRendererConfig() {
 
 export function World(props: WorldProps) {
   const { globeConfig } = props;
-  const scene = new Scene();
-  scene.fog = new Fog(0xffffff, 400, 2000);
-  const [isMounted, setIsMounted] = useState(false); // Add mount check
+  const sceneRef = useRef(new Scene());
+  sceneRef.current.fog = new Fog(0xffffff, 400, 2000);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true); // Set mounted on client
+    setIsMounted(true);
+    const scene = sceneRef.current;
+    return () => {
+      scene.traverse((obj) => {
+        if (obj.type === "Mesh") scene.remove(obj);
+      });
+    };
   }, []);
 
-  if (!isMounted) return null; // Defer rendering until mounted
+  if (!isMounted) return null;
 
   return (
-    <Canvas scene={scene} camera={{ fov: 50, aspect, near: 180, far: 1800 }}>
+    <Canvas scene={sceneRef.current} camera={{ fov: 50, aspect, near: 180, far: 1800 }}>
       <WebGLRendererConfig />
       <Lights globeConfig={globeConfig} />
       <Globe {...props} />

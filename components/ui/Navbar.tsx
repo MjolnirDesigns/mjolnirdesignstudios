@@ -62,7 +62,7 @@ const Navbar = () => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             <Image
-              src="/mjolnir-high-resolution-logo-transparent.png"
+              src="./Logos/mjolnir_logo_transparent.png"
               alt="Mjolnir Logo"
               width={124}
               height={64}

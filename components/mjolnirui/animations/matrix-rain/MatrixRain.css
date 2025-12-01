@@ -1,0 +1,9 @@
+/* MatrixRain.module.css */
+.canvas {
+  @apply absolute inset-0 w-full h-full;
+}
+
+/* Optional: subtle trail effect enhancement */
+.canvas {
+  image-rendering: pixelated; /* Gives that retro Matrix feel */
+}

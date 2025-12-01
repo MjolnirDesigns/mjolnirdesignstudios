@@ -67,6 +67,8 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
               <li><Link href="/privacy-policy" className="text-gray-400 lg:hover:text-gold transition block">Privacy Policy</Link></li>
               <li><Link href="/terms-of-service" className="text-gray-400 lg:hover:text-gold transition block">Terms of Service</Link></li>
               <li><Link href="/cookie-policy" className="text-gray-400 lg:hover:text-gold transition block">Cookie Policy</Link></li>
+              <li><Link href="/trademark-policy" className="text-gray-400 lg:hover:text-gold transition block">Trademark Policy</Link></li>
+              <li><Link href="/media-kit" className="text-gray-400 lg:hover:text-gold transition block">Media Kit</Link></li>
             </ul>
           </div>
         </div>

@@ -1,3 +1,4 @@
+/* app/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -33,6 +34,16 @@
     --ring: 240 10% 3.9%;
     
     --radius: 0.5rem;
+    
+    --chart-1: 12 76% 61%;
+    
+    --chart-2: 173 58% 39%;
+    
+    --chart-3: 197 37% 24%;
+    
+    --chart-4: 43 74% 66%;
+    
+    --chart-5: 27 87% 67%;
   }
 
   .dark {
@@ -63,6 +74,11 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
   }
 }
 
@@ -87,5 +103,127 @@
 
   .black-gradient {
     background: linear-gradient(90deg, #161a31 0%, #06091f 100%);
+  }
+}
+
+/* Booking Modal Styling */
+@media (min-width: 1024px) {
+  .pricing-modal {
+    width: 800px !important; /* Fixed width for square-like shape */
+    max-width: 800px !important;
+    max-height: 800px !important; /* Match width for square aspect */
+    margin-top: 80px !important; /* Adjust for navbar */
+    padding: 24px !important; /* Consistent padding */
+    padding-left: 24px !important; /* Explicit left padding */
+    padding-right: 24px !important; /* Explicit right padding */
+    border: 2px solid #c0c0c0 !important; /* Silver border */
+    overflow-y: auto !important; /* Allow scrolling if content exceeds */
+  }
+  .calendly-inline-widget {
+    height: 400px !important; /* Reduced to fit within 600px height */
+    width: 100% !important;
+    max-width: 550px !important; /* Fit within modal with padding */
+  }
+  .calendly-inline-widget .calendly-button {
+    font-size: 24px !important;
+    max-width: 400px !important;
+    background-color: #10B981 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    transition: background-color 0.3s !important;
+  }
+  .calendly-inline-widget .calendly-button:hover {
+    background-color: #0e9f6e !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  .pricing-modal {
+    width: 90% !important; /* Percentage width with padding */
+    max-width: 90% !important;
+    max-height: 425px !important; /* Adjusted height */
+    margin-top: 40px !important; /* Adjust for navbar on mobile */
+    padding: 16px !important; /* Consistent padding */
+    padding-left: 16px !important; /* Explicit left padding */
+    padding-right: 16px !important; /* Explicit right padding */
+    border: 2px solid #c0c0c0 !important; /* Silver border */
+    overflow-y: auto !important; /* Allow scrolling if needed */
+  }
+  .calendly-inline-widget {
+    height: 425px !important; /* Reduced to fit within 450px height */
+    width: 100% !important;
+    max-width: 90% !important; /* Fit within modal with padding */
+  }
+  .calendly-inline-widget .calendly-button {
+    font-size: 18px !important;
+    max-width: 200px !important;
+    background-color: #10B981 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    transition: background-color 0.3s !important;
+  }
+  .calendly-inline-widget .calendly-button:hover {
+    background-color: #0e9f6e !important;
+  }
+}
+
+/* Attempt to force dark mode on Calendly iframe (limited due to cross-origin) */
+.calendly-inline-widget iframe {
+  background-color: #1a202c !important; /* Dark background */
+  color: #ffffff !important; /* Light text */
+}
+.calendly-inline-widget iframe * {
+  color: #ffffff !important; /* Attempt to force light text on all elements */
+  background-color: #1a202c !important; /* Dark background for all elements */
+}
+
+
+/* Custom gold slider thumb — works everywhere */
+.slider-accent::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #FFD700;
+  border: 3px solid #000;
+  border-radius: 50%;
+  cursor: grab;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.slider-accent:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+
+.slider-accent::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #FFD700;
+  border: 3px solid #000;
+  border-radius: 50%;
+  cursor: grab;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.slider-accent:active::-moz-range-thumb {
+  cursor: grabbing;
+}
+
+/* Optional: style the track */
+.slider-accent::-webkit-slider-runnable-track {
+  background: #374151;
+  border-radius: 8px;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
