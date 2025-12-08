@@ -27,7 +27,7 @@ const X_OFF = 0.00125;
 const Y_OFF = 0.00125;
 const Z_OFF = 0.0005;
 
-export function Vortex({
+export default function Vortex({
   children,
   className = "",
   containerClassName = "",
@@ -46,46 +46,22 @@ export function Vortex({
   const tick = useRef(0);
   const noise3D = useRef(createNoise3D());
   const center = useRef({ x: 0, y: 0 });
+  const frameRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  const rand = React.useCallback((n: number) => n * Math.random(), []);
+  const randRange = React.useCallback((n: number) => n - rand(2 * n), [rand]);
+  const fadeInOut = React.useCallback((t: number, m: number) => {
+    const hm = 0.5 * m;
+    return Math.abs(((t + hm) % m) - hm) / hm;
+  }, []);
+  const lerp = React.useCallback(
+    (n1: number, n2: number, speed: number) => (1 - speed) * n1 + speed * n2,
+    []
+  );
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    ctxRef.current = ctx;
-
-    const resize = () => {
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * window.devicePixelRatio;
-      canvas.height = rect.height * window.devicePixelRatio;
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-
-      center.current = {
-        x: rect.width / 2,
-        y: rect.height / 2,
-      };
-
-      const length = particleCount * PARTICLE_PROP_COUNT;
-      particleProps.current = new Float32Array(length);
-
-      for (let i = 0; i < length; i += PARTICLE_PROP_COUNT) {
-        initParticle(i);
-      }
-    };
-
-    const rand = (n: number) => n * Math.random();
-    const randRange = (n: number) => n - rand(2 * n);
-    const fadeInOut = (t: number, m: number) => {
-      const hm = 0.5 * m;
-      return Math.abs(((t + hm) % m) - hm) / hm;
-    };
-    const lerp = (n1: number, n2: number, speed: number) => (1 - speed) * n1 + speed * n2;
-
-    const initParticle = (i: number) => {
+  const initParticle = React.useCallback(
+    (i: number, canvas: HTMLCanvasElement) => {
       const props = particleProps.current!;
-      const canvas = canvasRef.current!;
-
       const x = rand(canvas.width);
       const y = center.current.y + randRange(rangeY);
       const vx = 0;
@@ -97,13 +73,22 @@ export function Vortex({
       const hue = baseHue + rand(RANGE_HUE);
 
       props.set([x, y, vx, vy, life, ttl, speed, radius, hue], i);
-    };
+    },
+    [
+      baseHue,
+      baseRadius,
+      baseSpeed,
+      rangeRadius,
+      rangeSpeed,
+      rangeY,
+      rand,
+      randRange,
+    ]
+  );
 
-    const drawParticle = (i: number) => {
+  const drawParticle = React.useCallback(
+    (i: number, ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => {
       const props = particleProps.current!;
-      const ctx = ctxRef.current!;
-      const canvas = canvasRef.current!;
-
       const x = props[i];
       const y = props[i + 1];
       const vx = props[i + 2];
@@ -134,53 +119,95 @@ export function Vortex({
       props[i + 1] = nextY;
       props[i + 2] = nextVx;
       props[i + 3] = nextVy;
-      props[i + 4] = life + 1;
+      props[i + 4] += 1;
+      // Optionally, re-initialize particle if life > ttl
+      if (props[i + 4] > props[i + 5]) {
+        initParticle(i, canvas);
+      }
+    },
+    [fadeInOut, initParticle, lerp, noise3D, particleProps, tick]
+  );
 
-      if (
-        nextX < 0 ||
-        nextX > canvas.width ||
-        nextY < 0 ||
-        nextY > canvas.height ||
-        life > ttl
-      ) {
-        initParticle(i);
+  const animate: () => void = React.useCallback(() => {
+    const canvas = canvasRef.current;
+    const ctx = ctxRef.current;
+    if (!canvas || !ctx || !particleProps.current) return;
+
+    // Clear with background
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw all particles
+    for (let i = 0; i < particleProps.current.length; i += PARTICLE_PROP_COUNT) {
+      drawParticle(i, ctx, canvas);
+    }
+
+    // Glow passes
+    ctx.save();
+    ctx.filter = "blur(8px) brightness(200%)";
+    ctx.globalCompositeOperation = "lighter";
+    ctx.drawImage(canvas, 0, 0);
+    ctx.restore();
+
+    ctx.save();
+    ctx.filter = "blur(4px) brightness(200%)";
+    ctx.globalCompositeOperation = "lighter";
+    ctx.drawImage(canvas, 0, 0);
+    ctx.restore();
+
+    tick.current++;
+    frameRef.current = requestAnimationFrame(animate);
+  }, [
+    backgroundColor,
+    drawParticle,
+    particleProps,
+    tick,
+    frameRef,
+    canvasRef,
+    ctxRef,
+  ]);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctxRef.current = ctx;
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      if (!rect) return;
+
+      const width = rect.width;
+      const height = rect.height;
+
+      canvas.width = width * window.devicePixelRatio;
+      canvas.height = height * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+      center.current = {
+        x: width / 2,
+        y: height / 2,
+      };
+
+      // Re-init particles on resize
+      const length = particleCount * PARTICLE_PROP_COUNT;
+      particleProps.current = new Float32Array(length);
+      for (let i = 0; i < length; i += PARTICLE_PROP_COUNT) {
+        initParticle(i, canvas);
       }
     };
 
-    const animate = () => {
-      const ctx = ctxRef.current!;
-      const canvas = canvasRef.current!;
-
-      ctx.fillStyle = backgroundColor;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      for (let i = 0; i < particleProps.current!.length; i += PARTICLE_PROP_COUNT) {
-        drawParticle(i);
-      }
-
-      // Glow passes
-      ctx.save();
-      ctx.filter = "blur(8px) brightness(200%)";
-      ctx.globalCompositeOperation = "lighter";
-      ctx.drawImage(canvas, 0, 0);
-      ctx.restore();
-
-      ctx.save();
-      ctx.filter = "blur(4px) brightness(200%)";
-      ctx.globalCompositeOperation = "lighter";
-      ctx.drawImage(canvas, 0, 0);
-      ctx.restore();
-
-      tick.current++;
-      requestAnimationFrame(animate);
-    };
+    const observer = new ResizeObserver(resize);
+    observer.observe(canvas);
 
     resize();
-    window.addEventListener("resize", resize);
-    animate();
+
+    frameRef.current = requestAnimationFrame(animate);
 
     return () => {
-      window.removeEventListener("resize", resize);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      observer.disconnect();
     };
   }, [
     particleCount,
@@ -191,7 +218,10 @@ export function Vortex({
     baseRadius,
     rangeRadius,
     backgroundColor,
+    animate,
+    initParticle,
   ]);
+
 
   return (
     <div className={`relative w-full h-full overflow-hidden ${containerClassName}`}>

@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import { Heart, Github, Download } from "lucide-react";
-import Smoke from "./Smoke";
+import Accretion from "./Accretion";
 
 declare global {
   interface Window {
-    isSmokeCodeTab?: boolean;
+    isAccretionCodeTab?: boolean;
   }
 }
 
@@ -14,34 +14,26 @@ function cn(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function SmokeSection() {
+export default function AccretionSection() {
   const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
 
-  const [color, setColor] = useState("#FFD700");
-  const [scale, setScale] = useState(5.0);
-  const [trailLength, setTrailLength] = useState(60);
-  const [inertia, setInertia] = useState(0.6);
-  const [grainIntensity, setGrainIntensity] = useState(0.08);
-  const [bloomStrength, setBloomStrength] = useState(0.2);
-  const [bloomRadius, setBloomRadius] = useState(1.2);
-  const [bloomThreshold, setBloomThreshold] = useState(0.02);
-  const [brightness, setBrightness] = useState(3.0);
+  const [speed, setSpeed] = useState(1.0);
+  const [turbulence, setTurbulence] = useState(1.2);
+  const [depth, setDepth] = useState(1.0);
+  const [brightness, setBrightness] = useState(1.1);
+  const [colorShift, setColorShift] = useState(1.0);
 
   useEffect(() => {
-    window.isSmokeCodeTab = activeTab === "code";
-    return () => { window.isSmokeCodeTab = false; };
+    window.isAccretionCodeTab = activeTab === "code";
+    return () => { window.isAccretionCodeTab = false; };
   }, [activeTab]);
 
   const resetToDefault = () => {
-    setColor("#FFD700");
-    setScale(5.0);
-    setTrailLength(60);
-    setInertia(0.6);
-    setGrainIntensity(0.08);
-    setBloomStrength(0.2);
-    setBloomRadius(1.2);
-    setBloomThreshold(0.02);
-    setBrightness(3.0);
+    setSpeed(1.0);
+    setTurbulence(1.2);
+    setDepth(1.0);
+    setBrightness(1.1);
+    setColorShift(1.0);
   };
 
   return (
@@ -50,7 +42,7 @@ export default function SmokeSection() {
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-4">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gold tracking-tight">
-              Smoke
+              Accretion Disk
             </h1>
             <span className="bg-emerald-500/20 text-emerald-400 text-sm font-bold px-4 py-1.5 rounded-full border border-emerald-500/50">
               NEW
@@ -71,7 +63,7 @@ export default function SmokeSection() {
                     : "text-gray-400 hover:text-gold"
                 )}
               >
-                {tab}
+                {tab === "preview" ? "Preview" : "Code"}
               </button>
             ))}
           </div>
@@ -96,140 +88,86 @@ export default function SmokeSection() {
             <div className="lg:col-span-8">
               <h3 className="text-2xl font-bold text-silver mb-6">Preview</h3>
               <div className="relative bg-black border border-gold/20 rounded-3xl overflow-hidden shadow-2xl h-96 md:h-[520px]">
-                <Smoke
-                  color={color}
-                  scale={scale}
-                  trailLength={trailLength}
-                  inertia={inertia}
-                  grainIntensity={grainIntensity}
-                  bloomStrength={bloomStrength}
-                  bloomRadius={bloomRadius}
-                  bloomThreshold={bloomThreshold}
+                <Accretion
+                  speed={speed}
+                  turbulence={turbulence}
+                  depth={depth}
                   brightness={brightness}
+                  colorShift={colorShift}
                 />
-                {/* DARK TEXT — REVEALED BY SMOKE */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <h1 className="text-9xl z-10 font-black text-black/90 select-none tracking-tighter leading-none">
-                    MJÖLNIRUI
-                  </h1>
-                </div>
               </div>
             </div>
 
             <div className="lg:col-span-4">
               <h3 className="text-2xl font-bold text-silver mb-6">Customize</h3>
-              <div className="bg-black/30 border border-gold/10 rounded-2xl p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+              <div className="bg-black/30 border border-gold/10 rounded-2xl p-6 space-y-7">
                 <div>
-                  <label className="text-gray-300 font-medium block mb-2">Color</label>
-                  <input
-                    type="color"
-                    value={color}
-                    onChange={(e) => setColor(e.target.value)}
-                    className="w-full h-16 rounded cursor-pointer border-2 border-gold/30"
-                    title="Select smoke color"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-gray-300 font-medium block mb-2">
-                    Scale: {scale.toFixed(1)}×
-                  </label>
-                  <input
-                    type="range"
-                    min="1"
-                    max="10"
-                    step="0.1"
-                    value={scale}
-                    onChange={(e) => setScale(+e.target.value)}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust smoke scale"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-gray-300 font-medium block mb-2">Trail Length: {trailLength}</label>
-                  <input
-                    type="range"
-                    min="10"
-                    max="100"
-                    step="5"
-                    value={trailLength}
-                    onChange={(e) => setTrailLength(+e.target.value)}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust trail length"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-gray-300 font-medium block mb-2">Inertia: {inertia.toFixed(2)}</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="0.99"
-                    step="0.01"
-                    value={inertia}
-                    onChange={(e) => setInertia(+e.target.value)}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust inertia"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-gray-300 font-medium block mb-2">Grain: {grainIntensity.toFixed(3)}</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="0.2"
-                    step="0.005"
-                    value={grainIntensity}
-                    onChange={(e) => setGrainIntensity(+e.target.value)}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust grain intensity"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-gray-300 font-medium block mb-2">Bloom Strength: {bloomStrength.toFixed(2)}</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="0.5"
-                    step="0.01"
-                    value={bloomStrength}
-                    onChange={(e) => setBloomStrength(+e.target.value)}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust bloom strength"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-gray-300 font-medium block mb-2">Bloom Radius: {bloomRadius.toFixed(1)}</label>
+                  <label className="text-gray-300 font-medium block mb-2">Speed: {speed.toFixed(1)}</label>
                   <input
                     type="range"
                     min="0.1"
-                    max="3"
+                    max="2"
                     step="0.1"
-                    value={bloomRadius}
-                    onChange={(e) => setBloomRadius(+e.target.value)}
+                    value={speed}
+                    onChange={(e) => setSpeed(+e.target.value)}
                     className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust bloom radius"
-                    placeholder="Bloom radius"
+                    title="Speed"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-gray-300 font-medium block mb-2">Turbulence: {turbulence.toFixed(1)}</label>
+                  <input id="turbulence-slider"
+                    type="range"
+                    min="0.5"
+                    max="2"
+                    step="0.1"
+                    value={turbulence}
+                    onChange={(e) => setTurbulence(+e.target.value)}
+                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
+                    title="Turbulence"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-gray-300 font-medium block mb-2">Depth: {depth.toFixed(1)}</label>
+                  <input
+                    type="range"
+                    min="0.5"
+                    max="2"
+                    step="0.1"
+                    value={depth}
+                    onChange={(e) => setDepth(+e.target.value)}
+                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
+                    title="Depth"
                   />
                 </div>
 
                 <div>
                   <label className="text-gray-300 font-medium block mb-2">Brightness: {brightness.toFixed(1)}</label>
                   <input
-                    id="brightness"
                     type="range"
                     min="0.5"
-                    max="5"
+                    max="2"
                     step="0.1"
                     value={brightness}
                     onChange={(e) => setBrightness(+e.target.value)}
                     className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust brightness"
-                    placeholder="Brightness"
+                    title="Brightness"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-gray-300 font-medium block mb-2">Color Shift: {colorShift.toFixed(1)}</label>
+                  <input
+                    type="range"
+                    min="0.5"
+                    max="2"
+                    step="0.1"
+                    value={colorShift}
+                    onChange={(e) => setColorShift(+e.target.value)}
+                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
+                    title="Color Shift"
                   />
                 </div>
 
@@ -250,17 +188,17 @@ export default function SmokeSection() {
           <div>
             <h3 className="text-2xl font-bold text-silver mb-6">Install</h3>
             <pre className="bg-black/60 border border-gold/20 rounded-2xl p-8 text-orange text-lg font-mono">
-              npm install three postprocessing
+              npm install three
             </pre>
           </div>
           <div>
             <h3 className="text-2xl font-bold text-silver mb-6">Usage</h3>
             <pre className="bg-black/60 border border-gold/20 rounded-2xl p-8 overflow-x-auto">
               <code className="text-orange font-mono text-sm">
-{`import Smoke from "@/components/mjolnirui/backgrounds/smoke/Smoke"
+{`import Accretion from "@/components/mjolnirui/backgrounds/accretion/Accretion"
 
-<div className="relative h-screen bg-black">
-  <Smoke color="#FFD700" scale={5} />
+<div className="relative w-full h-screen">
+  <Accretion speed={1.0} turbulence={1.2} depth={1.0} brightness={1.1} colorShift={1.0} />
 </div>`}
               </code>
             </pre>

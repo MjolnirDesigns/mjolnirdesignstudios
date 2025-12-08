@@ -246,6 +246,24 @@ export const hyperspeedPresets = {
     lightPairsPerRoadWay: 80,
     carLightsFade: 0.7,
     speedUp: 3,
+    lightStickWidth: [0.12, 0.5], // Added to match HyperspeedOptions type
+    lightStickHeight: [1.3, 1.7], // Added to match HyperspeedOptions type
+    movingAwaySpeed: [60, 80], // Added to match HyperspeedOptions type
+    movingCloserSpeed: [-120, -160], // Added to match HyperspeedOptions type
+    carLightsLength: [400 * 0.05, 400 * 0.15], // Added to match HyperspeedOptions type
+    carLightsRadius: [0.05, 0.14], // Added to match HyperspeedOptions type
+    carWidthPercentage: [0.3, 0.5], // Added to match HyperspeedOptions type
+    carShiftX: [-0.2, 0.2], // Added to match HyperspeedOptions type
+    carFloorSeparation: [0.05, 1], // Added to match HyperspeedOptions type
+    length: 400, // Added to match HyperspeedOptions type
+    fov: 90, // Added to match HyperspeedOptions type
+    fovSpeedUp: 150, // Added to match HyperspeedOptions type
+    // lanesPerRoad, roadWidth, and islandWidth already set above, removed duplicates
+    shoulderLinesWidthPercentage: 0.05, // Added to match HyperspeedOptions type
+    brokenLinesWidthPercentage: 0.1, // Added to match HyperspeedOptions type
+    brokenLinesLengthPercentage: 0.5, // Added to match HyperspeedOptions type
+    onSpeedUp: () => {}, // Added to match HyperspeedOptions type
+    onSlowDown: () => {}, // Added to match HyperspeedOptions type
     colors: {
       roadColor: 0x0f0022,
       islandColor: 0x1a0044,
@@ -721,7 +739,9 @@ class CarLights {
     const curve = new THREE.LineCurve3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -1));
     const geometry = new THREE.TubeGeometry(curve, 40, 1, 8, false);
 
-    const instanced = new THREE.InstancedBufferGeometry().copy(geometry as any) as THREE.InstancedBufferGeometry;
+    const instanced = new THREE.InstancedBufferGeometry();
+    instanced.index = geometry.index;
+    instanced.attributes = geometry.attributes;
     instanced.instanceCount = options.lightPairsPerRoadWay * 2;
 
     const laneWidth = options.roadWidth / options.lanesPerRoad;
@@ -879,7 +899,9 @@ class LightsSticks {
   init() {
     const options = this.options;
     const geometry = new THREE.PlaneGeometry(1, 1);
-    const instanced = new THREE.InstancedBufferGeometry().copy(geometry as any) as THREE.InstancedBufferGeometry;
+    const instanced = new THREE.InstancedBufferGeometry();
+    instanced.index = geometry.index;
+    instanced.attributes = geometry.attributes;
     const totalSticks = options.totalSideLightSticks;
     instanced.instanceCount = totalSticks;
 
@@ -1493,26 +1515,101 @@ const Hyperspeed: FC<HyperspeedProps> = ({ preset = "one", effectOptions = {} })
   const containerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<App | null>(null);
 
-  useEffect(() => {
-    if (!containerRef.current) return;
 
+  useEffect(() => {
+  if (!containerRef.current) return;
+
+  // Only create App ONCE
+  if (!appRef.current) {
     const base = preset ? { ...defaultOptions, ...hyperspeedPresets[preset] } : defaultOptions;
     const options = { ...base, ...effectOptions };
 
-    // Resolve string distortion → actual distortion object
     if (typeof options.distortion === "string") {
       options.distortion = distortions[options.distortion] || distortions.turbulentDistortion;
     }
 
     const app = new App(containerRef.current, options as HyperspeedOptions);
     appRef.current = app;
-
     app.loadAssets().then(() => app.init());
+  }
 
-    return () => {
-      app?.dispose();
-    };
-  }, [preset, effectOptions]);
+  return () => {
+    appRef.current?.dispose();
+    appRef.current = null;
+  };
+}, []);
+
+
+// SINGLE, PERFECT useEffect — handles init AND preset changes
+useEffect(() => {
+  if (!containerRef.current) return;
+
+  // Always rebuild options from current preset + effectOptions
+  const base = preset ? { ...defaultOptions, ...hyperspeedPresets[preset] } : defaultOptions;
+  const options = { ...base, ...effectOptions };
+
+  if (typeof options.distortion === "string") {
+    options.distortion = distortions[options.distortion] || distortions.turbulentDistortion;
+  }
+
+  // If App already exists → update it (preset change)
+  if (appRef.current) {
+    const app = appRef.current;
+
+    // Clear old scene
+    app.scene.clear();
+
+    // Rebuild everything with new options
+    app.road = new Road(app, options as HyperspeedOptions);
+    app.leftCarLights = new CarLights(
+      app,
+      options as HyperspeedOptions,
+      options.colors.leftCars,
+      (options.movingAwaySpeed as [number, number]),
+      new THREE.Vector2(0, 1 - options.carLightsFade)
+    );
+    app.rightCarLights = new CarLights(
+      app,
+      options as HyperspeedOptions,
+      options.colors.rightCars,
+      (options.movingCloserSpeed as [number, number]),
+      new THREE.Vector2(1, 0 + options.carLightsFade)
+    );
+    app.leftSticks = new LightsSticks(app, options as HyperspeedOptions);
+
+    app.road.init();
+    app.leftCarLights.init();
+    app.leftCarLights.mesh.position.setX(-options.roadWidth / 2 - options.islandWidth / 2);
+    app.rightCarLights.init();
+    app.rightCarLights.mesh.position.setX(options.roadWidth / 2 + options.islandWidth / 2);
+    app.leftSticks.init();
+    app.leftSticks.mesh.position.setX(-(options.roadWidth + options.islandWidth / 2));
+
+    // Reset camera
+    app.camera.fov = options.fov;
+    app.camera.position.set(0, 4.5, 10);
+    app.camera.lookAt(0, 0, 0);
+    app.camera.updateProjectionMatrix();
+
+    app.speedUp = 0;
+    app.timeOffset = 0;
+
+    return; // ← Done, no re-creation
+  }
+
+  // First time only — create App
+  const app = new App(containerRef.current, options as HyperspeedOptions);
+  appRef.current = app;
+
+  app.loadAssets().then(() => {
+    app.init();
+  });
+
+  return () => {
+    appRef.current?.dispose();
+    appRef.current = null;
+  };
+}, [preset, effectOptions]); // ← Stable, consistent deps — no more React warnings
 
   return <div ref={containerRef} className="hyperspeed-container" />;
 };

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Heart, Github } from "lucide-react";
-import { Vortex } from "./Vortex";
+import Vortex from "./Vortex";
 
 declare global {
   interface Window {

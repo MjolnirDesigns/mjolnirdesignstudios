@@ -47,7 +47,8 @@
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.173.0",
     "three-globe": "^2.45.0",
-    "three-mesh-bvh": "^0.8.0"
+    "three-mesh-bvh": "^0.8.0",
+    "three-stdlib": "^2.36.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

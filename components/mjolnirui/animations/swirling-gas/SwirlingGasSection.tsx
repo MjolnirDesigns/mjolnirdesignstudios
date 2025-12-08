@@ -1,4 +1,3 @@
-// components/mjolnirui/backgrounds/shaders/SwirlingGasSection.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -19,10 +18,7 @@ export default function SwirlingGasSection() {
   const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
 
   const [speed, setSpeed] = useState(1.0);
-  const [hue, setHue] = useState(200);
-  const [intensity, setIntensity] = useState(1.0);
-  const [saturation, setSaturation] = useState(1.0);
-  const [brightness, setBrightness] = useState(1.0);
+  const [intensity, setIntensity] = useState(1.2);
 
   useEffect(() => {
     window.isSwirlingGasCodeTab = activeTab === "code";
@@ -31,26 +27,25 @@ export default function SwirlingGasSection() {
 
   const resetToDefault = () => {
     setSpeed(1.0);
-    setHue(200);
-    setIntensity(1.0);
-    setSaturation(1.0);
-    setBrightness(1.0);
+    setIntensity(1.2);
   };
 
   return (
     <section className="w-full">
       <div className="max-w-7xl mx-auto px-6 py-12">
+        {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-4">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gold tracking-tight">
               Swirling Gas
             </h1>
-            <span className="bg-purple-600/30 text-purple-400 text-sm font-bold px-4 py-1.5 rounded-full border border-purple-600/50 animate-pulse">
-              COSMIC
+            <span className="bg-emerald-500/20 text-emerald-400 text-sm font-bold px-4 py-1.5 rounded-full border border-emerald-500/50">
+              NEW
             </span>
           </div>
         </div>
 
+        {/* Tabs + Buttons */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 border-b border-gold/20 pb-6">
           <div className="flex gap-8 overflow-x-auto scrollbar-hide">
             {(["preview", "code"] as const).map((tab) => (
@@ -86,88 +81,51 @@ export default function SwirlingGasSection() {
       {activeTab === "preview" ? (
         <>
           <div className="grid lg:grid-cols-12 gap-10 mb-16 max-w-7xl mx-auto px-6">
+            {/* Preview */}
             <div className="lg:col-span-8">
               <h3 className="text-2xl font-bold text-silver mb-6">Preview</h3>
-              <div className="relative bg-black border border-gold/20 rounded-3xl overflow-hidden shadow-2xl h-96 md:h-[700px]">
-                <SwirlingGas
-                  speed={speed}
-                  hue={hue}
-                  intensity={intensity}
-                  saturation={saturation}
-                  brightness={brightness}
-                />
+              <div className="relative bg-black border border-gold/20 rounded-3xl overflow-hidden shadow-2xl h-96 md:h-[520px]">
+                <SwirlingGas speed={speed} intensity={intensity} />
               </div>
             </div>
 
+            {/* Controls */}
             <div className="lg:col-span-4">
               <h3 className="text-2xl font-bold text-silver mb-6">Customize</h3>
               <div className="bg-black/30 border border-gold/10 rounded-2xl p-6 space-y-7">
                 <div>
-                  <label className="text-gray-300 font-medium block mb-2">Speed: {speed.toFixed(2)}</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="3"
-                    step="0.05"
-                    value={speed}
-                    onChange={e => setSpeed(+e.target.value)}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust speed"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-300 font-medium block mb-2">Hue</label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="360"
-                    value={hue}
-                    onChange={e => setHue(+e.target.value)}
-                    className="w142-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust hue"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-300 font-medium block mb-2">Intensity: {intensity.toFixed(2)}
-
+                  <label className="text-gray-300 font-medium block mb-2">
+                    Speed: {speed.toFixed(2)}
                   </label>
                   <input
                     type="range"
                     min="0.1"
                     max="3"
-                    step="0.05"
-                    value={intensity}
-                    onChange={e => setIntensity(+e.target.value)}
+                    step="0.1"
+                    value={speed}
+                    onChange={(e) => setSpeed(+e.target.value)}
                     className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust intensity"
+                    title="Adjust speed"
+                    placeholder="Adjust speed"
                   />
                 </div>
-                <div>
-                  <label className="text-gray-300 font-medium block mb-2">Saturation: {saturation.toFixed(2)}
 
+                <div>
+                  <label className="text-gray-300 font-medium block mb-2">
+                    Intensity: {intensity.toFixed(2)}
                   </label>
                   <input
+                    id="intensity-slider"
                     type="range"
-                    min="0"
-                    max="2"
-                    step="0.05"
-                    value={saturation}
-                    onChange={e => setSaturation(+e.target.value)}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust saturation"
-                  />
-                </div>
-                <div>
-                  <label className="text-gray-300 font-medium block mb-2">Brightness: {brightness.toFixed(2)}</label>
-                  <input
-                    type="range"
+                    name="intensity"
                     min="0.5"
                     max="2"
-                    step="0.05"
-                    value={brightness}
-                    onChange={e => setBrightness(+e.target.value)}
+                    step="0.1"
+                    value={intensity}
+                    onChange={(e) => setIntensity(+e.target.value)}
                     className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust brightness"
+                    title="Adjust intensity"
+                    placeholder="Adjust intensity"
                   />
                 </div>
 
@@ -182,23 +140,57 @@ export default function SwirlingGasSection() {
               </div>
             </div>
           </div>
+
+          {/* Props Table */}
+          <div className="max-w-7xl mx-auto px-6">
+            <h3 className="text-2xl font-bold text-silver mb-6">Props</h3>
+            <div className="bg-black/40 border border-gold/20 rounded-2xl overflow-hidden">
+              <table className="w-full">
+                <thead className="bg-gold/10">
+                  <tr>
+                    <th className="text-left p-5 font-bold">Property</th>
+                    <th className="text-left p-5 font-bold">Type</th>
+                    <th className="text-left p-5 font-bold">Default</th>
+                    <th className="text-left p-5 font-bold">Range</th>
+                    <th className="text-left p-5 font-bold">Description</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gold/10">
+                  <tr>
+                    <td className="p-5 font-mono text-gold">speed</td>
+                    <td className="p-5 text-gray-300">number</td>
+                    <td className="p-5 font-mono text-gray-400">1.0</td>
+                    <td className="p-5 text-gray-400">0.1 – 3.0</td>
+                    <td className="p-5 text-gray-300">Animation speed</td>
+                  </tr>
+                  <tr>
+                    <td className="p-5 font-mono text-gold">intensity</td>
+                    <td className="p-5 text-gray-300">number</td>
+                    <td className="p-5 font-mono text-gray-400">1.2</td>
+                    <td className="p-5 text-gray-400">0.5 – 2.0</td>
+                    <td className="p-5 text-gray-300">Glow intensity</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </>
       ) : (
-        <div className="max-w-7xl mx-auto px-6 space-y-16">
+        <div className="max-w-7xl mx-auto px-6 space-y-16 py-12">
           <div>
             <h3 className="text-2xl font-bold text-silver mb-6">Install</h3>
             <pre className="bg-black/60 border border-gold/20 rounded-2xl p-8 text-orange text-lg font-mono">
-              npm install ogl
+              npm install three
             </pre>
           </div>
           <div>
             <h3 className="text-2xl font-bold text-silver mb-6">Usage</h3>
             <pre className="bg-black/60 border border-gold/20 rounded-2xl p-8 overflow-x-auto">
               <code className="text-orange font-mono text-sm">
-{`import SwirlingGas from "@/components/mjolnirui/backgrounds/shaders/SwirlingGas"
+{`import SwirlingGas from "@/components/mjolnirui/backgrounds/swirlinggas/SwirlingGas"
 
-<div className="relative w-full h-screen bg-black">
-  <SwirlingGas speed={1.5} hue={240} intensity={1.8} />
+<div className="relative w-full h-screen">
+  <SwirlingGas speed={1.0} intensity={1.2} />
 </div>`}
               </code>
             </pre>

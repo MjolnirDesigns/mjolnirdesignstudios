@@ -1,156 +1,154 @@
-// components/mjolnirui/backgrounds/shaders/SwirlingGas.tsx
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { Renderer, Camera, Transform, Program, Mesh, Geometry, Vec2 } from "ogl";
+import React, { useRef, useEffect } from "react";
+import * as THREE from "three";
 
 type SwirlingGasProps = {
-  speed?: number;
-  hue?: number;
-  saturation?: number;
-  brightness?: number;
-  intensity?: number;
   className?: string;
   style?: React.CSSProperties;
+  speed?: number;
+  intensity?: number;
 };
 
-const SwirlingGas: React.FC<SwirlingGasProps> = ({
-  speed = 1.0,
-  hue = 200,
-  saturation = 1.0,
-  brightness = 1.0,
-  intensity = 1.0,
-  className = "",
+export default function SwirlingGas({
+  className,
   style,
-}) => {
+  speed = 1.0,
+  intensity = 1.2,
+}: SwirlingGasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const rendererRef = useRef<Renderer | null>(null);
-  const sceneRef = useRef<Transform | null>(null);
-  const meshRef = useRef<Mesh | null>(null);
-  const frameIdRef = useRef<number | null>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const frameRef = useRef<number | null>(null);
+  const mounted = useRef(false);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || mounted.current) return;
+    mounted.current = true;
 
-    const renderer = new Renderer({
-      dpr: Math.min(window.devicePixelRatio, 2),
-      alpha: true,
-      antialias: true,
-    });
-    const gl = renderer.gl;
-    containerRef.current.appendChild(gl.canvas);
-    rendererRef.current = renderer;
+    const container = containerRef.current;
 
-    const camera = new Camera(gl);
-    camera.position.z = 1;
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const geometry = new THREE.PlaneGeometry(2, 2);
 
-    const scene = new Transform();
-    sceneRef.current = scene;
+    const uniforms = {
+      iTime: { value: 0 },
+      iResolution: { value: new THREE.Vector3() },
+      u_speed: { value: speed },
+      u_intensity: { value: intensity },
+    };
 
-    const geometry = new Geometry(gl, {
-      position: {
-        size: 2,
-        data: new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
-      },
-    });
-
-    const program = new Program(gl, {
-      vertex: /* glsl */ `
-        attribute vec2 position;
+    const material = new THREE.ShaderMaterial({
+      uniforms,
+      vertexShader: `
+        varying vec2 vUv;
         void main() {
-          gl_Position = vec4(position, 0.0, 1.0);
+          vUv = uv;
+          gl_Position = vec4(position, 1.0);
         }
       `,
-      fragment: /* glsl */ `
-        precision highp float;
+      fragmentShader: `
         uniform float iTime;
-        uniform vec2 iResolution;
-        uniform float speed;
-        uniform float hue;
-        uniform float saturation;
-        uniform float brightness;
-        uniform float intensity;
-
-        vec3 hsv2rgb(vec3 c) {
-          vec4 K = vec4(1.0, 2.0/3.0, 1.0/3.0, 3.0);
-          vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-          return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-        }
+        uniform vec3 iResolution;
+        uniform float u_speed;
+        uniform float u_intensity;
 
         void mainImage(out vec4 O, vec2 I) {
-          float i, z = fract(dot(I, sin(I))), d;
-          for(O *= i; i++ < 100.0; 
-              O += (sin(z + vec4(6,2,4,0)) + 1.5) / d * intensity)
-          {
-            vec3 p = z * normalize(vec3(I + I, 0) - iResolution.xyy);
-            p.z += 6.0;
-            for(d = 1.0; d < 9.0; d /= 0.8)
-              p += cos(p.yzx * d - iTime * speed) / d;
-            z += d = 0.002 + abs(length(p) - 0.5) / 40000.0;
+          float i, z = fract(dot(I,sin(I))), d;
+          for(O *= i; i++<1e2; O+=(sin(z+vec4(6,2,4,0))+1.5)/d * u_intensity) {
+            vec3 p = z * normalize(vec3(I+I,0) - iResolution.xyy);
+            p.z += 6.;
+            for(d=1.; d<9.; d/=.8)
+              p += cos(p.yzx*d-iTime * u_speed)/d;
+            z += d = .002+abs(length(p)-.5)/4e1;
           }
-          // FIXED: Added missing closing parenthesis
-          O = tanh(O / 7000.0);
-          O.rgb = hsv2rgb(vec3(hue/360.0 + O.r*0.1, saturation, brightness));
+          O = tanh(O/7e3);
         }
 
+        varying vec2 vUv;
         void main() {
-          mainImage(gl_FragColor, gl_FragCoord.xy);
+          mainImage(gl_FragColor, vUv * iResolution.xy);
         }
       `,
-      uniforms: {
-        iTime: { value: 0 },
-        iResolution: { value: new Vec2() }, // ← FIXED: Vec2 instance
-        speed: { value: speed },
-        hue: { value: hue },
-        saturation: { value: saturation },
-        brightness: { value: brightness },
-        intensity: { value: intensity },
-      },
+      transparent: true,
     });
 
-    const mesh = new Mesh(gl, { geometry, program });
-    mesh.setParent(scene);
-    meshRef.current = mesh;
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
 
     const handleResize = () => {
-      const width = containerRef.current!.clientWidth;
-      const height = containerRef.current!.clientHeight;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
       renderer.setSize(width, height);
-      program.uniforms.iResolution.value.set(width * renderer.dpr, height * renderer.dpr);
+      uniforms.iResolution.value.set(width, height, 1);
     };
 
     window.addEventListener("resize", handleResize);
     handleResize();
 
-    const start = performance.now();
+    const startTime = performance.now();
+
     const animate = () => {
-      program.uniforms.iTime.value = (performance.now() - start) * 0.001;
-      renderer.render({ scene, camera });
-      frameIdRef.current = requestAnimationFrame(animate);
+      if (!mounted.current) return;
+      frameRef.current = requestAnimationFrame(animate);
+
+      const elapsed = (performance.now() - startTime) / 1000;
+      uniforms.iTime.value = elapsed;
+
+      renderer.render(scene, camera);
     };
-    frameIdRef.current = requestAnimationFrame(animate);
+
+    animate();
 
     return () => {
-      if (frameIdRef.current) cancelAnimationFrame(frameIdRef.current);
+      mounted.current = false;
       window.removeEventListener("resize", handleResize);
-      if (gl.canvas.parentElement) gl.canvas.parentElement.removeChild(gl.canvas);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      if (rendererRef.current) {
+        rendererRef.current.dispose();
+        if (container.contains(rendererRef.current.domElement)) {
+          container.removeChild(rendererRef.current.domElement);
+        }
+        rendererRef.current = null;
+      }
     };
-  }, []);
+  }, []); // ← Only once
 
+  // Update speed/intensity without breaking
   useEffect(() => {
-    if (meshRef.current?.program) {
-      const u = meshRef.current.program.uniforms;
-      u.speed.value = speed;
-      u.hue.value = hue;
-      u.saturation.value = saturation;
-      u.brightness.value = brightness;
-      u.intensity.value = intensity;
+    // Find the material from the mesh in the scene
+    const renderer = rendererRef.current;
+    if (renderer && renderer.domElement && mounted.current) {
+      // Find the mesh and update its material uniforms
+      const container = containerRef.current;
+      if (container) {
+        // Find the mesh in the scene
+        const scene = (renderer as THREE.WebGLRenderer & { scene?: THREE.Scene }).scene;
+        const sceneMeshes: THREE.Object3D[] = scene?.children || [];
+        const mesh = sceneMeshes.find((obj: THREE.Object3D) => {
+          // @ts-expect-error: material may exist on Mesh
+          return obj.material && obj.material.uniforms;
+        }) as THREE.Mesh | undefined;
+        const mat = mesh?.material as THREE.ShaderMaterial | undefined;
+        if (mat?.uniforms) {
+          mat.uniforms.u_speed.value = speed;
+          mat.uniforms.u_intensity.value = intensity;
+        }
+      }
     }
-  }, [speed, hue, saturation, brightness, intensity]);
+  }, [speed, intensity]);
 
   return (
-    <div ref={containerRef} className={`absolute inset-0 ${className}`} style={style} />
+    <div
+      ref={containerRef}
+      className={`absolute inset-0 w-full h-full ${className || ""}`}
+      style={{ background: "black", ...style }}
+    />
   );
-};
-
-export default SwirlingGas;
+}

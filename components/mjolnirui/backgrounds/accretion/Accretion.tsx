@@ -1,26 +1,28 @@
+// components/mjolnirui/backgrounds/accretion/Accretion.tsx
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 
-type StarFieldProps = {
+type AccretionProps = {
   className?: string;
   style?: React.CSSProperties;
   speed?: number;
-  hue?: number;
-  saturation?: number;
+  turbulence?: number;
+  depth?: number;
   brightness?: number;
-  mouseMode?: "hover" | "click";
+  colorShift?: number;
 };
 
-export const StarField: React.FC<StarFieldProps> = ({
+export default function Accretion({
   className,
   style,
   speed = 1.0,
-  hue = 40,  // Golden-orange hue
-  saturation = 1.0,
-  brightness = 1.0,
-}) => {
+  turbulence = 1.2,
+  depth = 1.0,
+  brightness = 1.1,
+  colorShift = 1.0,
+}: AccretionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const frameRef = useRef<number | null>(null);
@@ -28,7 +30,6 @@ export const StarField: React.FC<StarFieldProps> = ({
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Copy the ref value to a variable for cleanup
     const container = containerRef.current;
 
     const scene = new THREE.Scene();
@@ -38,9 +39,11 @@ export const StarField: React.FC<StarFieldProps> = ({
     const uniforms = {
       iTime: { value: 0 },
       iResolution: { value: new THREE.Vector3() },
-      iMouse: { value: new THREE.Vector4(0, 0, 0, 0) },
-      iHSV: { value: new THREE.Vector3(hue / 360, saturation, brightness) },
-      iSpeed: { value: speed },
+      u_speed: { value: speed },
+      u_turbulence: { value: turbulence },
+      u_depth: { value: depth },
+      u_brightness: { value: brightness },
+      u_colorShift: { value: colorShift },
     };
 
     const material = new THREE.ShaderMaterial({
@@ -55,59 +58,33 @@ export const StarField: React.FC<StarFieldProps> = ({
       fragmentShader: `
         uniform float iTime;
         uniform vec3 iResolution;
-        uniform vec4 iMouse;
-        uniform vec3 iHSV;
-        uniform float iSpeed;
+        uniform float u_speed;
+        uniform float u_turbulence;
+        uniform float u_depth;
+        uniform float u_brightness;
+        uniform float u_colorShift;
 
-        #define iterations 17
-        #define formuparam 0.53
-        #define volsteps 20
-        #define stepsize 0.1
-        #define zoom 0.800
-        #define tile 0.850
-        #define brightness 0.0015
-        #define darkmatter 0.300
-        #define distfading 0.730
-        #define saturation 0.850
+        vec4 tanhApprox(vec4 x) {
+          vec4 x2 = x * x;
+          return x * (3.0 + x2) / (3.0 + 3.0 * x2);
+        }
 
-        void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
-          vec2 uv=fragCoord.xy/iResolution.xy-.5;
-          uv.y*=iResolution.y/iResolution.x;
-          vec3 dir=vec3(uv*zoom,1.);
-          float time=iTime*iSpeed+.25;
-
-          float a1=.5+iMouse.x/iResolution.x*2.;
-          float a2=.8+iMouse.y/iResolution.y*2.;
-          mat2 rot1=mat2(cos(a1),sin(a1),-sin(a1),cos(a1));
-          mat2 rot2=mat2(cos(a2),sin(a2),-sin(a2),cos(a2));
-          dir.xz*=rot1;
-          dir.xy*=rot2;
-          vec3 from=vec3(1.,.5,0.5);
-          from+=vec3(time*2.,time,-2.);
-          from.xz*=rot1;
-          from.xy*=rot2;
-          
-          float s=0.1,fade=1.;
-          vec3 v=vec3(0.);
-          for (int r=0; r<volsteps; r++) {
-            vec3 p=from+s*dir*.5;
-            p = abs(vec3(tile)-mod(p,vec3(tile*2.)));
-            float pa,a=pa=0.;
-            for (int i=0; i<iterations; i++) { 
-              p=abs(p)/dot(p,p)-formuparam;
-              a+=abs(length(p)-pa);
-              pa=length(p);
+        void mainImage(out vec4 O, vec2 I) {
+          float z = 0.0, d, i = 0.0;
+          O = vec4(0.0);
+          for(float step = 0.0; step < 20.0; step++) {
+            i = step;
+            vec3 p = z * normalize(vec3(I + I, 0) - iResolution.xyx) + 0.1 * u_depth;
+            p = vec3(atan(p.y / 0.2, p.x) * 2.0, p.z / 3.0, length(p.xy) - 5.0 - z * 0.2);
+            for(float turb = 0.0; turb < 7.0; turb++) {
+              p += sin(p.yzx * (turb + 1.0) + iTime * u_speed + 0.3 * i * u_turbulence) / (turb + 1.0);
             }
-            float dm=max(0.,darkmatter-a*a*.001);
-            a*=a*a;
-            if (r>6) fade*=1.-dm;
-            v+=fade;
-            v+=vec3(s,s*s,s*s*s*s)*a*brightness*fade;
-            fade*=distfading;
-            s+=stepsize;
+            d = length(vec4(0.4 * cos(p) - 0.4, p.z));
+            z += d;
+            vec4 color = (1.0 + cos(p.x + i * 0.4 + z + vec4(6, 1, 2, 0) * u_colorShift)) / d;
+            O += color * u_brightness;
           }
-          v=mix(vec3(length(v)),v,saturation);
-          fragColor = vec4(v*.01,1.);
+          O = tanhApprox(O * O / 400.0);
         }
 
         varying vec2 vUv;
@@ -128,7 +105,6 @@ export const StarField: React.FC<StarFieldProps> = ({
     rendererRef.current = renderer;
 
     const handleResize = () => {
-      if (!container) return;
       const width = container.clientWidth;
       const height = container.clientHeight;
       renderer.setSize(width, height);
@@ -141,7 +117,6 @@ export const StarField: React.FC<StarFieldProps> = ({
     const clock = new THREE.Clock();
     const animate = () => {
       frameRef.current = requestAnimationFrame(animate);
-
       uniforms.iTime.value = clock.getElapsedTime();
       renderer.render(scene, camera);
     };
@@ -151,11 +126,11 @@ export const StarField: React.FC<StarFieldProps> = ({
       window.removeEventListener("resize", handleResize);
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
       renderer.dispose();
-      if (container?.contains(renderer.domElement)) {
+      if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
     };
-  }, [speed, hue, saturation, brightness]);
+  }, [speed, turbulence, depth, brightness, colorShift]);
 
   return (
     <div

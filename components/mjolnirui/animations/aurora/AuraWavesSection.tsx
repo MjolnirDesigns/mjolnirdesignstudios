@@ -20,7 +20,7 @@ export default function AuroraSection() {
     const [color1, setColor1] = useState("#ff9ec2"); // Soft pink
     const [color2, setColor2] = useState("#a8f0d0"); // Pale mint green
     const [color3, setColor3] = useState("#4fc3ff"); // Electric sky blue
-    const [amplitude, setAmplitude] = useState(1.0);
+    const [amplitude, setAmplitude] = useState(2.25);
     const [blend, setBlend] = useState(0.5);
     const [speed, setSpeed] = useState(0.5);
 

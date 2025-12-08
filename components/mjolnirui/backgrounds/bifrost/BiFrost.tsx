@@ -3,11 +3,11 @@
 
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
-import './BiFrost.css'
+import "./BiFrost.css";
 
 // ===================================================================
-//  M J O L N I R   D E S I G N   S T U D I O S
-//  B I F R O S T — The True Rainbow Bridge of Asgard
+//  M J Ö L N I R   D E S I G N   S T U D I O S
+//  B I F R Ö S T — The True Rainbow Bridge of Asgard
 // ===================================================================
 
 const VERTEX_SHADER = `
@@ -15,7 +15,7 @@ const VERTEX_SHADER = `
   void main() { gl_Position = vec4(position, 1.0); }
 `;
 
-// FULLY WORKING FRAGMENT SHADER — Shadertoy → WebGL2 fixed
+// FULLY OPTIMIZED FRAGMENT SHADER — Vertical beams, ROYGBIV, max energy
 const FRAGMENT_SHADER = `
 #ifdef GL_ES
 precision highp float;
@@ -61,7 +61,6 @@ uniform float uFade;
 #define FLOW_SHARPNESS 1.5
 #define W_BASE_X 1.5
 #define W_LAYER_GAP 0.25
-
 #define W_LANES 10
 #define W_SIDE_DECAY 0.5
 #define W_HALF 0.01
@@ -165,7 +164,7 @@ void mainImage(out vec4 fc, in vec2 frag){
     for(int k=-TAP_RADIUS;k<=TAP_RADIUS;++k){
         float tu=tV+float(k)*DT_LOCAL,wt=tauWf(tu,tauMin,tauMax); if(wt<=0.0) continue;
         float yb=(-R_V)*cos(tu),s=clamp(yb/R_V,0.0,1.0),spd=max(abs(sin(tu)),0.02);
-        float env=pow(1.0-şi,0.6)*spd;
+        float env=pow(1.0-s,0.6)*spd;
         float cap=1.0-smoothstep(TOP_FADE_START,1.0,s); cap=pow(cap,TOP_FADE_EXP); env*=cap;
         float ph=s/max(FLOW_PERIOD,EPS)+uFlowTime*uFlowSpeed;
         float fl=pow(tri01(ph),FLOW_SHARPNESS);
@@ -217,15 +216,20 @@ void mainImage(out vec4 fc, in vec2 frag){
     fc=vec4(col,alpha);
 }
 
-// FIXED: Correct entry point for Three.js
 void main() {
   mainImage(gl_FragColor, gl_FragCoord.xy);
 }
 `;
 
-// Asgard's sacred rainbow
-const BIFROST_COLORS = [
-  "#FF2400", "#FF6B00", "#FFDD00", "#00FF88", "#0099FF", "#6600FF", "#CC00FF"
+// ROYGBIV colors — perfect order
+const ROYGBIV = [
+  "#FF0000", // Red
+  "#FF7F00", // Orange
+  "#FFFF00", // Yellow
+  "#00FF00", // Green
+  "#0000FF", // Blue
+  "#4B0082", // Indigo
+  "#9400D3", // Violet
 ];
 
 interface BiFrostProps {
@@ -237,7 +241,7 @@ interface BiFrostProps {
 
 export default function BiFrost({
   className = "",
-  intensity = 1.3,
+  intensity = 1.5,
   speed = 1.0,
   mouseTilt = true,
 }: BiFrostProps = {}) {
@@ -259,55 +263,56 @@ export default function BiFrost({
     renderer.domElement.style.inset = "0";
     container.appendChild(renderer.domElement);
 
-    const geometry = new THREE.PlaneGeometry(2, 2);
-    const meshes: THREE.Mesh[] = [];
+  const geometry = new THREE.PlaneGeometry(2, 2, 1, 1);
+  geometry.computeVertexNormals?.(); // Optional but safe
 
-    BIFROST_COLORS.forEach((hex, i) => {
-      const angle = (i / 7) * Math.PI * 2;
-      const radius = 0.25 + (i / 7) * 0.16;
-      const converge = 0.96;
+  // Declare meshes array to store all mesh objects
+  const meshes: THREE.Mesh[] = [];
 
-      const color = new THREE.Color(hex);
-      color.multiplyScalar(intensity);
+  // 7 vertical beams — ROYGBIV from left to right
+  ROYGBIV.forEach((hex, i) => {
+    const xOffset = -0.6 + (i / 6) * 1.2; // Spread across screen
+    const color = new THREE.Color(hex);
+    color.multiplyScalar(intensity);
 
-      const uniforms = {
-        iTime: { value: 0 },
-        iResolution: { value: new THREE.Vector3() },
-        iMouse: { value: new THREE.Vector4(0, 0, 0, 0) },
-        uWispDensity: { value: 1.5 + i * 0.1 },
-        uTiltScale: { value: mouseTilt ? 0.018 : 0 },
-        uFlowTime: { value: i * 0.35 },
-        uFogTime: { value: 0 },
-        uBeamXFrac: { value: 0.5 + Math.sin(angle) * radius },
-        uBeamYFrac: { value: 0.5 + Math.cos(angle) * radius * converge },
-        uFlowSpeed: { value: (0.36 + i * 0.05) * speed },
-        uVLenFactor: { value: 2.4 },
-        uHLenFactor: { value: 0.44 + i * 0.07 },
-        uFogIntensity: { value: 0.6 },
-        uFogScale: { value: 0.28 },
-        uWSpeed: { value: 15 + i * 3 },
-        uWIntensity: { value: 8 + i * 1.4 },
-        uFlowStrength: { value: 0.33 },
-        uDecay: { value: 1.22 },
-        uFalloffStart: { value: 1.32 },
-        uFogFallSpeed: { value: 0.7 },
-        uColor: { value: new THREE.Vector3(color.r, color.g, color.b) },
-        uFade: { value: 1 },
-      };
+    const uniforms = {
+      iTime: { value: 0 },
+      iResolution: { value: new THREE.Vector3() },
+      iMouse: { value: new THREE.Vector4(0, 0, 0, 0) },
+      uWispDensity: { value: 3.0 + i * 0.3 },     // High wisp density
+      uTiltScale: { value: mouseTilt ? 0.018 : 0 },
+      uFlowTime: { value: i * 0.35 },
+      uFogTime: { value: 0 },
+      uBeamXFrac: { value: 0.5 + xOffset },       // Horizontal position
+      uBeamYFrac: { value: 0.5 },                 // Centered vertically
+      uFlowSpeed: { value: 0.8 + i * 0.15 },       // Energetic flow
+      uVLenFactor: { value: 6.0 },                // Full height
+      uHLenFactor: { value: 0.15 + i * 0.05 },     // Narrow width
+      uFogIntensity: { value: 0.8 + i * 0.1 },     // More fog randomness
+      uFogScale: { value: 0.35 },
+      uWSpeed: { value: 30 + i * 5 },             // Super fast wisps
+      uWIntensity: { value: 18 + i * 2 },         // Extremely bright wisps
+      uFlowStrength: { value: 0.6 },
+      uDecay: { value: 1.0 },
+      uFalloffStart: { value: 1.1 },
+      uFogFallSpeed: { value: 1.2 },
+      uColor: { value: new THREE.Vector3(color.r, color.g, color.b) },
+      uFade: { value: 1 },
+    };
 
-      const material = new THREE.RawShaderMaterial({
-        vertexShader: VERTEX_SHADER,
-        fragmentShader: FRAGMENT_SHADER,
-        uniforms,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      });
-
-      const mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
-      meshes.push(mesh);
+    const material = new THREE.RawShaderMaterial({
+      vertexShader: VERTEX_SHADER,
+      fragmentShader: FRAGMENT_SHADER,
+      uniforms,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
     });
+
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+    meshes.push(mesh);
+  });
 
     const clock = new THREE.Clock();
     let mouseX = 0;
@@ -367,8 +372,6 @@ export default function BiFrost({
       ref={containerRef}
       className={`relative w-full h-full overflow-hidden ${className}`}
       style={{ background: "#000" }}
-    >
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/70" />
-    </div>
+    />
   );
 }

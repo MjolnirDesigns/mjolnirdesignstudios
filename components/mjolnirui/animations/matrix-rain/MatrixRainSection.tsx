@@ -73,7 +73,7 @@ export default function MatrixRainSection() {
   const [hue, setHue] = useState(120);
   const [speed, setSpeed] = useState(1.0);
   const [specialWord, setSpecialWord] = useState('BITCOIN');
-  const [wordChance, setWordChance] = useState(0.01);
+  const [wordChance, setWordChance] = useState(0.001);
   const [specialHue, setSpecialHue] = useState(39);
   const [specialSaturation, setSpecialSaturation] = useState(100);
   const [specialLightness, setSpecialLightness] = useState(65);

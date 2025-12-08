@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import { Heart, Github, Download } from "lucide-react";
-import BiFrost from "./BiFrost";
+import Singularity from "./Singularity";
 
 declare global {
   interface Window {
-    isBiFrostCodeTab?: boolean;
+    isSingularityCodeTab?: boolean;
   }
 }
 
@@ -14,32 +14,35 @@ function cn(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function BiFrostSection() {
+export default function SingularitySection() {
   const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
 
-  const [intensity, setIntensity] = useState(1.3);
   const [speed, setSpeed] = useState(1.0);
-  const [mouseTilt, setMouseTilt] = useState(true);
+  const [intensity, setIntensity] = useState(1.2);
+  const [size, setSize] = useState(1.1);
+  const [waveStrength, setWaveStrength] = useState(1.0);
+  const [colorShift, setColorShift] = useState(1.0);
 
   useEffect(() => {
-    window.isBiFrostCodeTab = activeTab === "code";
-    return () => { window.isBiFrostCodeTab = false; };
+    window.isSingularityCodeTab = activeTab === "code";
+    return () => { window.isSingularityCodeTab = false; };
   }, [activeTab]);
 
   const resetToDefault = () => {
-    setIntensity(1.3);
     setSpeed(1.0);
-    setMouseTilt(true);
+    setIntensity(2.9);
+    setSize(1.15);
+    setWaveStrength(1.0);
+    setColorShift(1.0);
   };
 
   return (
     <section className="w-full">
       <div className="max-w-7xl mx-auto px-6 py-12">
-        {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-4">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gold tracking-tight">
-              BiFrost
+              Singularity
             </h1>
             <span className="bg-emerald-500/20 text-emerald-400 text-sm font-bold px-4 py-1.5 rounded-full border border-emerald-500/50">
               NEW
@@ -47,7 +50,6 @@ export default function BiFrostSection() {
           </div>
         </div>
 
-        {/* Tabs + Buttons */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 border-b border-gold/20 pb-6">
           <div className="flex gap-8 overflow-x-auto scrollbar-hide">
             {(["preview", "code"] as const).map((tab) => (
@@ -83,73 +85,89 @@ export default function BiFrostSection() {
       {activeTab === "preview" ? (
         <>
           <div className="grid lg:grid-cols-12 gap-10 mb-16 max-w-7xl mx-auto px-6">
-            {/* Preview */}
             <div className="lg:col-span-8">
               <h3 className="text-2xl font-bold text-silver mb-6">Preview</h3>
               <div className="relative bg-black border border-gold/20 rounded-3xl overflow-hidden shadow-2xl h-96 md:h-[520px]">
-                <BiFrost intensity={intensity} speed={speed} mouseTilt={mouseTilt} />
+                <div className="absolute inset-0">
+                  <Singularity
+                    speed={speed}
+                    intensity={intensity}
+                    size={size}
+                    waveStrength={waveStrength}
+                    colorShift={colorShift}
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Controls */}
             <div className="lg:col-span-4">
               <h3 className="text-2xl font-bold text-silver mb-6">Customize</h3>
               <div className="bg-black/30 border border-gold/10 rounded-2xl p-6 space-y-7">
-                {/* Intensity */}
                 <div>
-                  <label className="text-gray-300 font-medium block mb-2">
-                    Intensity: {intensity.toFixed(2)}
-                  </label>
+                  <label className="text-gray-300 font-medium block mb-2">Speed: {speed.toFixed(2)}</label>
+                  <input 
+                    type="range" 
+                    min="0.1" 
+                    max="3" 
+                    step="0.1" 
+                    value={speed} 
+                    onChange={(e) => setSpeed(+e.target.value)} 
+                    title="Speed"
+                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent" />
+                </div>
+                <div>
+                  <label className="text-gray-300 font-medium block mb-2">Intensity: {intensity.toFixed(2)}</label>
                   <input
                     type="range"
                     min="0.5"
-                    max="2.5"
-                    step="0.05"
+                    max="3"
+                    step="0.1"
                     value={intensity}
                     onChange={(e) => setIntensity(+e.target.value)}
+                    title="Intensity"
                     className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust intensity"
                   />
                 </div>
-
-                {/* Speed */}
                 <div>
-                  <label className="text-gray-300 font-medium block mb-2">
-                    Speed: {speed.toFixed(2)}×
-                  </label>
-                  <input id="speed"
-                    name="speed"
+                  <label className="text-gray-300 font-medium block mb-2">Size: {size.toFixed(2)}</label>
+                  <input
                     type="range"
-                    min="0.3"
-                    max="2.5"
+                    min="0.5"
+                    max="2"
                     step="0.05"
-                    value={speed}
-                    onChange={(e) => setSpeed(+e.target.value)}
+                    value={size}
+                    onChange={(e) => setSize(+e.target.value)}
+                    title="Size"
                     className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
-                    title="Adjust speed"
+                  />
+                </div>
+                <div>
+                  <label className="text-gray-300 font-medium block mb-2">Wave Strength: {waveStrength.toFixed(2)}</label>
+                  <input
+                    type="range"
+                    min="0.5"
+                    max="2"
+                    step="0.05"
+                    value={waveStrength}
+                    onChange={(e) => setWaveStrength(+e.target.value)}
+                    title="Wave Strength"
+                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
+                  />
+                </div>
+                <div>
+                  <label className="text-gray-300 font-medium block mb-2">Color Shift: {colorShift.toFixed(2)}</label>
+                  <input
+                    type="range"
+                    min="0.5"
+                    max="2"
+                    step="0.05"
+                    value={colorShift}
+                    onChange={(e) => setColorShift(+e.target.value)}
+                    title="Color Shift"
+                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-accent"
                   />
                 </div>
 
-                {/* Mouse Tilt */}
-                <div className="flex items-center justify-between">
-                  <label className="text-gray-300 font-medium">Mouse Tilt</label>
-                  <button
-                    onClick={() => setMouseTilt(!mouseTilt)}
-                    className={cn(
-                      "relative inline-flex h-6 w-11 items-center rounded-full transition",
-                      mouseTilt ? "bg-gold" : "bg-gray-700"
-                    )}
-                  >
-                    <span
-                      className={cn(
-                        "inline-block h-4 w-4 transform rounded-full bg-black transition",
-                        mouseTilt ? "translate-x-6" : "translate-x-1"
-                      )}
-                    />
-                  </button>
-                </div>
-
-                {/* Reset */}
                 <div className="pt-6 border-t border-gold/20">
                   <button
                     onClick={resetToDefault}
@@ -162,7 +180,6 @@ export default function BiFrostSection() {
             </div>
           </div>
 
-          {/* Props Table */}
           <div className="max-w-7xl mx-auto px-6">
             <h3 className="text-2xl font-bold text-silver mb-6">Props</h3>
             <div className="bg-black/40 border border-gold/20 rounded-2xl overflow-hidden">
@@ -178,25 +195,39 @@ export default function BiFrostSection() {
                 </thead>
                 <tbody className="divide-y divide-gold/10">
                   <tr>
-                    <td className="p-5 font-mono text-gold">intensity</td>
-                    <td className="p-5 text-gray-300">number</td>
-                    <td className="p-5 font-mono text-gray-400">1.3</td>
-                    <td className="p-5 text-gray-400">0.5 – 2.5</td>
-                    <td className="p-5 text-gray-300">Overall glow, color power, and wisp strength</td>
-                  </tr>
-                  <tr>
                     <td className="p-5 font-mono text-gold">speed</td>
                     <td className="p-5 text-gray-300">number</td>
                     <td className="p-5 font-mono text-gray-400">1.0</td>
-                    <td className="p-5 text-gray-400">0.3 – 2.5</td>
-                    <td className="p-5 text-gray-300">Animation speed of flow, wisps, and fog</td>
+                    <td className="p-5 text-gray-400">0.1 – 3.0</td>
+                    <td className="p-5 text-gray-300">Rotation and animation speed</td>
                   </tr>
                   <tr>
-                    <td className="p-5 font-mono text-gold">mouseTilt</td>
-                    <td className="p-5 text-gray-300">boolean</td>
-                    <td className="p-5 font-mono text-gray-400">true</td>
-                    <td className="p-5 text-gray-400">true / false</td>
-                    <td className="p-5 text-gray-300">Enable volumetric fog tilt with mouse</td>
+                    <td className="p-5 font-mono text-gold">intensity</td>
+                    <td className="p-5 text-gray-300">number</td>
+                    <td className="p-5 font-mono text-gray-400">1.2</td>
+                    <td className="p-5 text-gray-400">0.5 – 3.0</td>
+                    <td className="p-5 text-gray-300">Overall brightness</td>
+                  </tr>
+                  <tr>
+                    <td className="p-5 font-mono text-gold">size</td>
+                    <td className="p-5 text-gray-300">number</td>
+                    <td className="p-5 font-mono text-gray-400">1.1</td>
+                    <td className="p-5 text-gray-400">0.5 – 2.0</td>
+                    <td className="p-5 text-gray-300">Black hole diameter</td>
+                  </tr>
+                  <tr>
+                    <td className="p-5 font-mono text-gold">waveStrength</td>
+                    <td className="p-5 text-gray-300">number</td>
+                    <td className="p-5 font-mono text-gray-400">1.0</td>
+                    <td className="p-5 text-gray-400">0.5 – 2.0</td>
+                    <td className="p-5 text-gray-300">Accretion disk turbulence</td>
+                  </tr>
+                  <tr>
+                    <td className="p-5 font-mono text-gold">colorShift</td>
+                    <td className="p-5 text-gray-300">number</td>
+                    <td className="p-5 font-mono text-gray-400">1.0</td>
+                    <td className="p-5 text-gray-400">0.5 – 2.0</td>
+                    <td className="p-5 text-gray-300">Color gradient intensity</td>
                   </tr>
                 </tbody>
               </table>
@@ -215,10 +246,16 @@ export default function BiFrostSection() {
             <h3 className="text-2xl font-bold text-silver mb-6">Usage</h3>
             <pre className="bg-black/60 border border-gold/20 rounded-2xl p-8 overflow-x-auto">
               <code className="text-orange font-mono text-sm">
-{`import BiFrost from "@/components/mjolnirui/backgrounds/bifrost/BiFrost"
+{`import Singularity from "@/components/mjolnirui/backgrounds/Singularity"
 
-<div className="relative w-full h-screen">
-  <BiFrost intensity={1.4} speed={1.2} />
+<div className="relative w-full h-screen overflow-hidden">
+  <Singularity 
+    speed={1.2}
+    intensity={1.8}
+    size={1.3}
+    waveStrength={1.4}
+    colorShift={1.2}
+  />
 </div>`}
               </code>
             </pre>

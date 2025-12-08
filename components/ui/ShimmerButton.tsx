@@ -10,7 +10,7 @@ const ShimmerButton = ({
     title: string;
     icon?: React.ReactNode;
     position?: string;
-    handleClick?: any;
+    handleClick?: React.MouseEventHandler<HTMLButtonElement>;
     otherClasses?: string;
 }) => {
   return (

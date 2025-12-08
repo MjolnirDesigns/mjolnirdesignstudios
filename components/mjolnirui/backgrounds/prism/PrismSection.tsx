@@ -21,9 +21,9 @@ export default function PrismSection() {
   // Optimized for beauty — NO GRAIN, PURE CRYSTAL
   const [animationType, setAnimationType] = useState<"rotate" | "hover" | "3drotate">("rotate");
   const [glow, setGlow] = useState(1.8);
-  const [bloom, setBloom] = useState(1.4);
+  const [bloom, setBloom] = useState(0.7);
   const [noise, setNoise] = useState(0.1);           // ← Was 0.5 → GRAINY! Now 0.1 = CLEAN
-  const [scale, setScale] = useState(4.2);           // ← Slightly larger = sharper
+  const [scale, setScale] = useState(2.5);           // ← Slightly larger = sharper
   const [hueShift, setHueShift] = useState(0);
   const [timeScale, setTimeScale] = useState(0.5);
   const [hoverStrength, setHoverStrength] = useState(2.2);

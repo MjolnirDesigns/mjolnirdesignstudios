@@ -17,13 +17,16 @@ import GlobeSection from "@/components/mjolnirui/animations/globe/GlobeSection";
 import HyperspeedSection from "@/components/mjolnirui/animations/hyperspeed/HyperspeedSection";
 import LaserFlowSection from "@/components/mjolnirui/animations/laser-flow/LaserFlowSection";
 import LightningSection from "@/components/mjolnirui/animations/lightning/LightningSection";
+import LightPillarSection from "@/components/mjolnirui/animations/light-pillar/LightPillarSection";
 import MatrixRainSection from "@/components/mjolnirui/animations/matrix-rain/MatrixRainSection";
-import SwirlingGasSection from "@/components/mjolnirui/animations/swirling-gas/SwirlingGasSection";
+import RippleGridSection from "@/components/mjolnirui/animations/ripple-grid/RippleGridSection";
+import SingularitySection from "@/components/mjolnirui/backgrounds/singularity/SingularitySection";
+
 
 
 // Background Components
 import AtomicSection from "@/components/mjolnirui/backgrounds/atomic/AtomicSection";
-import BiFrostSection from "@/components/mjolnirui/backgrounds/bifrost/BiFrostSection";
+import AccretionSection from "@/components/mjolnirui/backgrounds/accretion/AccretionSection";
 import ColorHaloSection from "@/components/mjolnirui/backgrounds/color-halo/ColorHaloSection";
 import DarkVeilSection from "@/components/mjolnirui/backgrounds/dark-veil/DarkVeilSection";
 import GravityLensSection from "@/components/mjolnirui/backgrounds/gravity-lens/GravityLensSection";
@@ -34,6 +37,8 @@ import PrismSection from "@/components/mjolnirui/backgrounds/prism/PrismSection"
 import SilkyLinesSection from "@/components/mjolnirui/backgrounds/silky-lines/SilkyLinesSection";
 import SmokeSection from "@/components/mjolnirui/backgrounds/smoke/SmokeSection";
 import StarsBackgroundSection from "@/components/mjolnirui/backgrounds/stars/StarsBackgroundSection";
+import StarFieldSection from "@/components/mjolnirui/backgrounds/star-field/StarFieldSection";
+import SwirlingGasSection from "@/components/mjolnirui/animations/swirling-gas/SwirlingGasSection";
 import VortexSection from "@/components/mjolnirui/backgrounds/vortex/VortexSection";
 
 
@@ -41,6 +46,7 @@ import VortexSection from "@/components/mjolnirui/backgrounds/vortex/VortexSecti
 // import FloatingNavSection from "@/components/mjolnirui/navigation/floating-nav/FloatingNavSection";
 import CardNavSection from "@/components/mjolnirui/navigation/Card-Nav/CardNavSection";
 import SidebarSection from "@/components/mjolnirui/navigation/Sidebar/SidebarSection";
+
 
 
 
@@ -216,13 +222,14 @@ const categories: Category[] = [
       { id: "globe", name: "Globe", new: true, content: <GlobeSection /> },
       { id: "hyper-speed", name: "HyperSpeed", new: true, content: <HyperspeedSection /> },
       { id: "laser-flow", name: "Laser Flow", new: true, content: <LaserFlowSection /> },
-      { id: "letter-glitch", name: "Letter Glitch", new: true, content: <AnimationSection name="Letter Glitch" /> },
+      { id: "light-pillar", name: "Light Pillar", new: true, content: <LightPillarSection /> },
       { id: "lightning", name: "Lightning", new: true, content: <LightningSection /> },
       { id: "light-rays", name: "Light Rays", new: true, content: <AnimationSection name="Light Rays" /> },
       { id: "masonry", name: "Masonry", new: true, content: <AnimationSection name="Masonry" /> },
       { id: "matrix-rain", name: "Matrix Rain", new: true, content: <MatrixRainSection /> },
+      { id: "ripple-grid", name: "Ripple Grid", new: true, content: <RippleGridSection /> },
       { id: "roadmap", name: "RoadMap", new: true, content: <AnimationSection name="RoadMap" /> },
-      { id: "swirling-gas", name: "Swirling Gas", new: true, content: <SwirlingGasSection /> },
+      { id: "singularity", name: "Singularity", new: true, content: <SingularitySection /> },
       { id: "world-map", name: "WorldMap", new: true, content: <AnimationSection name="WorldMap" /> },
     ],
   },
@@ -230,7 +237,7 @@ const categories: Category[] = [
     category: "Backgrounds",
     subItems: [
       { id: "atomic", name: "Atomic", new: true, content: <AtomicSection /> },
-      { id: "bifrost", name: "BiFrost", new: true, content: <BiFrostSection /> },
+      { id: "accretion", name: "Accretion", new: true, content: <AccretionSection /> },
       { id: "color-halo", name: "Color Halo", new: true, content: <ColorHaloSection /> },
       { id: "dark-veil", name: "Dark Veil", new: true, content: <DarkVeilSection /> },
       { id: "gravity-lens", name: "Gravity Lens", new: true, content: <GravityLensSection /> },
@@ -241,6 +248,7 @@ const categories: Category[] = [
       { id: "silk-lines", name: "Silky Lines", new: true, content: <SilkyLinesSection /> },
       { id: "smoke", name: "Smoke", new: true, content: <SmokeSection /> },
       { id: 'stars-background', name: 'Stars', new: true, content: <StarsBackgroundSection /> },
+      { id: "star-field", name: "Star Field", new: true, content: <StarFieldSection /> },
       { id: 'swirling-gas', name: 'Swirling Gas', new: true, content: <SwirlingGasSection /> },
       { id: 'vortex', name: 'Vortex', new: true, content: <VortexSection /> },
     ],
